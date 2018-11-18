@@ -164,7 +164,7 @@ public class EventDetailsAdaptor extends RecyclerView.Adapter<EventDetailsAdapto
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(View view) {
             Intent intent = new Intent(context, EventMoreDetails.class);
             intent.putExtra("eventDetails", new Gson().toJson(eventDetails.get(getAdapterPosition())));
             context.startActivity(intent);

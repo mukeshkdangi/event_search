@@ -9,6 +9,16 @@ public class SearchForm {
     public double lat;
     public double lon;
 
+    public boolean isOtherLocation() {
+        return isOtherLocation;
+    }
+
+    public void setOtherLocation(boolean otherLocation) {
+        isOtherLocation = otherLocation;
+    }
+
+    public boolean isOtherLocation;
+
     public String getCategory() {
         return category;
     }

@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -63,7 +65,6 @@ public class EventDetailsPage extends AppCompatActivity {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-
         StringBuffer sBuf = new StringBuffer();
         sBuf.append("http://100.26.198.168:3000/api/ticketmaster/getevents/");
         sBuf.append(searchform.keyword).append("/");
