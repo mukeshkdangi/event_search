@@ -9,6 +9,16 @@ public class SearchForm {
     public double lat;
     public double lon;
 
+    public String getGeoHashCode() {
+        return geoHashCode;
+    }
+
+    public void setGeoHashCode(String geoHashCode) {
+        this.geoHashCode = geoHashCode;
+    }
+
+    public String geoHashCode;
+
     public boolean isOtherLocation() {
         return isOtherLocation;
     }

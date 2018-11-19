@@ -2,9 +2,11 @@ package com.example.mukesh.myapplication.Activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,7 +14,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mukesh.myapplication.POJO.SearchForm;
@@ -25,11 +26,15 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
+    public SearchForm searchform;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         Spinner spinner = findViewById(R.id.category_spinner);
 
@@ -54,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> unitDataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, distanceUnit);
         unitDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         unitSpinner.setAdapter(unitDataAdapter);
+
+        findViewById(R.id.keyword).setEnabled(true);
 
         findViewById(R.id.keyword).setOnTouchListener(new View.OnTouchListener() {
 
@@ -88,9 +95,13 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.location_desc).setEnabled(true);
             }
         });
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 10);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 10);
+        }
 
     }
 
@@ -127,39 +138,37 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.unit_spinner);
         String unit = spinner.getSelectedItem().toString();
 
-        SearchForm searchForm = new SearchForm();
-        searchForm.setKeyword(keyword);
-        searchForm.setCategory(category);
-        searchForm.setDistance(distance);
-        searchForm.setDistanceUnit(unit);
+        searchform = new SearchForm();
+        searchform.setKeyword(keyword);
+        searchform.setCategory(category);
+        searchform.setDistance(distance);
+        searchform.setDistanceUnit(unit);
 
         radioGroup = findViewById(R.id.radioLocation);
         int selectedId = radioGroup.getCheckedRadioButtonId();
         if (((RadioButton) findViewById(selectedId)).getText().toString().contains("Other")) {
-            searchForm.setOtherLocation(true);
+            searchform.setOtherLocation(true);
         } else {
             GPSTracker gps = new GPSTracker(view.getContext());
             if (gps != null) {
                 double latitude = gps.getLatitude();
                 double longitude = gps.getLongitude();
-                searchForm.setLat(latitude);
-                searchForm.setLon(longitude);
+                searchform.setLat(latitude);
+                searchform.setLon(longitude);
             }
         }
 
         if (isLocaDecPresent) {
-            searchForm.setLocationDescription(((EditText) findViewById(R.id.location_desc)).getText().toString());
+            searchform.setLocationDescription(((EditText) findViewById(R.id.location_desc)).getText().toString());
         }
 
 
         Intent newIntent = new Intent(this, EventDetailsPage.class);
-        newIntent.putExtra("searchForm", new Gson().toJson(searchForm));
+        newIntent.putExtra("searchForm", new Gson().toJson(searchform));
+        searchform = new Gson().fromJson(getIntent().getStringExtra("searchForm"), SearchForm.class);
         startActivity(newIntent);
 
     }
 
-    private boolean isInValidInput(View view) {
-
-        return false;
-    }
 }
+
