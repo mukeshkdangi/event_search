@@ -21,7 +21,12 @@ public class EventMoreDetails extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
-
+    private int[] tabIcons = {
+            R.drawable.info_outline,
+            R.drawable.artist,
+            R.drawable.venue,
+            R.drawable.upcoming
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +39,7 @@ public class EventMoreDetails extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
         EventDetails eventDetail = new Gson().fromJson(getIntent().getStringExtra("eventDetails"), EventDetails.class);
-       // new GetEventTabDetails().execute(new Gson().toJson(eventDetail));
+        // new GetEventTabDetails().execute(new Gson().toJson(eventDetail));
 
         Bundle bundle = new Bundle();
         bundle.putString("eventDetails", new Gson().toJson(eventDetail));
@@ -51,8 +56,15 @@ public class EventMoreDetails extends AppCompatActivity {
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+        setupTabIcons();
 
+    }
 
+    private void setupTabIcons() {
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+        tabLayout.getTabAt(3).setIcon(tabIcons[3]);
     }
 
 
