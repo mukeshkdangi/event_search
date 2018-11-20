@@ -4,17 +4,17 @@ package com.example.mukesh.myapplication.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.mukesh.myapplication.DelayedProgressDialog;
 import com.example.mukesh.myapplication.POJO.EventDetails;
 import com.example.mukesh.myapplication.POJO.EventTabInfo;
 import com.example.mukesh.myapplication.POJO.VenueTabInfo;
@@ -29,58 +29,103 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Random;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class EventTabFragment extends Fragment {
-    public static View view;
-    public static Context appContext;
-    public static FragmentManager fragmentTransaction;
-    public static EventTabFragment fragm;
+
+    public GetEventTabDetails getEventTabDetails;
+    public static DelayedProgressDialog progressDialog;
+    public View view;
+    public Context appContext;
+    public FragmentManager fragmentTransaction;
+    public EventTabFragment fragm;
 
     public EventTabFragment() {
-        // Required empty public constructor
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        String eventTabInfoStr = getArguments().getString("eventTabInfo");
+        Log.i("eventDetail", new Gson().toJson(eventTabInfoStr));
+
+        EventTabInfo eventTabInfo = new Gson().fromJson(eventTabInfoStr, EventTabInfo.class);
+
+        if (Objects.isNull(eventTabInfo)) {
+            progressDialog = new DelayedProgressDialog();
+            progressDialog.show(getFragmentManager(), "");
+            return view;
+
+        }
+        progressDialog.cancel();
 
         view = inflater.inflate(R.layout.fragment_event_tab, container, false);
-
-        String eventDetails = getArguments().getString("eventDetails");
-        EventDetails eventDetail = new Gson().fromJson(eventDetails, EventDetails.class);
-
         fragmentTransaction = getFragmentManager();
         appContext = getActivity().getApplicationContext();
         fragm = EventTabFragment.this;
 
-        new GetEventTabDetails().execute(eventDetails);
-        TableLayout ll = view.findViewById(R.id.tableLayout);
+        TextView eventKey = view.findViewById(R.id.artist_key);
+        eventKey.setText("Artist/Teams(s)");
 
-        for (int i = 1; i < 10; i++) {
-            TableRow tbrow = new TableRow(getActivity().getApplicationContext());
-            tbrow.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT));
+        TextView eventKey1 = view.findViewById(R.id.artist_value);
+        eventKey1.setText(eventTabInfo.getArtistName());
 
-            TextView tv1 = new TextView(getActivity().getApplicationContext());
-            tv1.setLayoutParams(new TableRow.LayoutParams(
-                    TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT));
-            tv1.setId(i);
+        TextView eventKey2 = view.findViewById(R.id.venue_key);
+        eventKey2.setText("Venue");
 
-            tv1.setText("Test id: " + i);
-            tbrow.addView(tv1);
-
-            ll.addView(tbrow, new TableLayout.LayoutParams(
-                    TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-        }
+        TextView eventKey3 = view.findViewById(R.id.venue_value);
+        eventKey3.setText(eventTabInfo.getVenueName());
 
 
+        TextView eventKey4 = view.findViewById(R.id.time_key);
+        eventKey4.setText("Time ");
+
+        TextView eventKey5 = view.findViewById(R.id.time_value);
+        eventKey5.setText(eventTabInfo.getTime());
+
+
+        TextView eventKey6  = view.findViewById(R.id.category_key);
+        eventKey6.setText("Category");
+
+        TextView eventKey7 = view.findViewById(R.id.category_value);
+        eventKey7.setText(eventTabInfo.getCategory());
+
+
+        eventKey = view.findViewById(R.id.price_key);
+        eventKey.setText("Price Range");
+
+        eventKey = view.findViewById(R.id.price_value);
+        eventKey.setText(eventTabInfo.getPriceRange());
+
+
+        eventKey = view.findViewById(R.id.buyTicketAt_key);
+        eventKey.setText("Buy Ticket At");
+
+        eventKey = view.findViewById(R.id.buyTicketAt_value);
+        eventKey.setText(eventTabInfo.getBuyTicketUrl());
+
+
+        eventKey = view.findViewById(R.id.seatMap_key);
+        eventKey.setText("Seat Map");
+
+        eventKey = view.findViewById(R.id.seatMap_value);
+        eventKey.setText(eventTabInfo.getSeatMapUrl());
+
+        Log.i("getEventTabDetails", new Gson().toJson(eventTabInfo));
         return view;
     }
 
@@ -132,22 +177,23 @@ class GetEventTabDetails extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onPostExecute(String eventTabResults) {
-        Log.i("", eventTabResults);
+
         eventTabInfo = new EventTabInfo();
         venueTabInfo = new VenueTabInfo();
-        Random random;
+
         try {
             JSONObject EventDetailsJson = new JSONObject(eventTabResults);
             eventTabInfo.setEventName(EventDetailsJson.getString("name"));
-            ;
             StringBuilder stringBuilder = new StringBuilder();
-            JSONArray attractionsJson = EventDetailsJson.getJSONObject("_embedded").getJSONArray("attractions");
-            for (int idx = 0; idx < attractionsJson.length(); idx++) {
-                if (idx > 1) {
-                    stringBuilder.append("|");
-                }
-                stringBuilder.append(attractionsJson.getJSONObject(idx).getString("name"));
+            JSONArray attractionsJson = EventDetailsJson.getJSONObject("_embedded").optJSONArray("attractions");
+            if (Objects.nonNull(attractionsJson)) {
+                for (int idx = 0; idx < attractionsJson.length(); idx++) {
+                    if (idx > 1) {
+                        stringBuilder.append("|");
+                    }
+                    stringBuilder.append(attractionsJson.getJSONObject(idx).getString("name"));
 
+                }
             }
             eventTabInfo.setArtistName(stringBuilder.toString());
             JSONObject venueJson = EventDetailsJson.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0);

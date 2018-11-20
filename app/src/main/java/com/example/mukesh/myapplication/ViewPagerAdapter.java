@@ -7,12 +7,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    List<Fragment> fragments = new ArrayList<>();
-    List<String> tabTitles = new ArrayList<>();
+    List<Fragment> fragments = new LinkedList<>();
+    List<String> tabTitles = new LinkedList<>();
     Bundle bundle;
 
     public void addFragment(Fragment fragment, String title) {

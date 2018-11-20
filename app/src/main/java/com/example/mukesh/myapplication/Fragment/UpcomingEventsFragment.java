@@ -1,30 +1,50 @@
 package com.example.mukesh.myapplication.Fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mukesh.myapplication.POJO.EventDetails;
+import com.example.mukesh.myapplication.POJO.UpcomingEventInfo;
 import com.example.mukesh.myapplication.R;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 
 public class UpcomingEventsFragment extends Fragment {
 
+    public GetUpcomingTabDetails getUpcomingTabDetails;
+    public View view;
+    FragmentTransaction fragmentTransaction;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
 
     public UpcomingEventsFragment() {
     }
@@ -33,19 +53,24 @@ public class UpcomingEventsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_upcoming_events, container, false);
-        String eventDetails = getArguments().getString("eventDetails");
-        EventDetails eventDetail = new Gson().fromJson(eventDetails, EventDetails.class);
-        new GetUpcomingTabDetails().execute(eventDetails);
+        view = inflater.inflate(R.layout.fragment_upcoming_events, container, false);
 
+        String upcomingEventInfosStr = getArguments().getString("upcomingEventInfos");
+
+        if (Objects.isNull(upcomingEventInfosStr)) {
+            return view;
+        }
+
+        List<UpcomingEventInfo> upcomingEventInfos = new Gson().fromJson(upcomingEventInfosStr, new TypeToken<List<UpcomingEventInfo>>() {
+        }.getType());
+        Log.i("upcomingEventInfosStr", upcomingEventInfosStr);
         return view;
     }
-
-
 }
 
 class GetUpcomingTabDetails extends AsyncTask<String, Integer, String> {
+    List<UpcomingEventInfo> upcomingEventInfos;
+
 
     @Override
     protected String doInBackground(String... strings) {
@@ -109,6 +134,34 @@ class GetUpcomingTabDetails extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onPostExecute(String upComingEvents) {
+        upcomingEventInfos = new ArrayList<>();
+        try {
 
+            JSONObject upcomingEventJson = new JSONObject(upComingEvents);
+            JSONArray upcomingEventJsonArr = upcomingEventJson.getJSONObject("resultsPage").getJSONObject("results").getJSONArray("event");
+
+            for (int idx = 0; idx < upcomingEventJsonArr.length(); idx++) {
+                UpcomingEventInfo upcomingEventInfo = new UpcomingEventInfo();
+                String displayName = upcomingEventJsonArr.getJSONObject(idx).optString("displayName");
+                String url = upcomingEventJsonArr.getJSONObject(idx).optString("uri");
+                JSONArray performance = upcomingEventJsonArr.getJSONObject(idx).getJSONArray("performance");
+                String artistName = "";
+
+                if (performance.length() > 0) {
+                    artistName = performance.getJSONObject(0).optString("displayName");
+                }
+
+                String date = upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start").getString("datetime");
+                upcomingEventInfo.setArtistName(artistName);
+                upcomingEventInfo.setDate(date);
+                upcomingEventInfo.setEventName(displayName);
+                upcomingEventInfo.setUrl(url);
+                upcomingEventInfos.add(upcomingEventInfo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Log.i("upcomingEventInfos size", String.valueOf(upcomingEventInfos.size()));
     }
 }

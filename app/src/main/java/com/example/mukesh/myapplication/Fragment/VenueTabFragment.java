@@ -3,19 +3,21 @@ package com.example.mukesh.myapplication.Fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mukesh.myapplication.POJO.EventDetails;
-import com.example.mukesh.myapplication.POJO.EventTabInfo;
 import com.example.mukesh.myapplication.POJO.VenueTabInfo;
 import com.example.mukesh.myapplication.R;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,28 +25,35 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Random;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class VenueTabFragment extends Fragment {
+    GetVenueTabDetails getVenueTabDetails;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
 
     public VenueTabFragment() {
-        // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_venue_tab, container, false);
-        String eventDetails = getArguments().getString("eventDetails");
-        EventDetails eventDetail = new Gson().fromJson(eventDetails, EventDetails.class);
+        String venueTabInfoStr = getArguments().getString("venueTabInfo");
 
-        new GetVenueTabDetails().execute(eventDetails);
+        if (Objects.isNull(venueTabInfoStr)) {
+            return view;
+        }
+        VenueTabInfo eventDetail = new Gson().fromJson(venueTabInfoStr, VenueTabInfo.class);
+        Log.i("eventDetail", new Gson().toJson(eventDetail));
 
         return view;
     }
@@ -93,7 +102,6 @@ class GetVenueTabDetails extends AsyncTask<String, Integer, String> {
     protected void onPostExecute(String eventTabResults) {
         Log.i("", eventTabResults);
         venueTabInfo = new VenueTabInfo();
-        Random random;
         try {
             JSONObject EventDetailsJson = new JSONObject(eventTabResults);
 

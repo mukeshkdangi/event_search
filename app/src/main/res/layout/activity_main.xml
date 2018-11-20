@@ -26,14 +26,12 @@
             android:hint="Enter keyword"
             android:inputType="textPersonName"
             android:singleLine="false"
-            android:text="Lakers"
             android:textAlignment="textStart"
             android:textSize="13dp"
             app:layout_constraintBottom_toTopOf="@+id/category_key"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/keyword_error"
-            tools:text="Lakers" />
+            app:layout_constraintTop_toBottomOf="@+id/keyword_error" />
 
         <TextView
             android:id="@+id/keyword_key"
