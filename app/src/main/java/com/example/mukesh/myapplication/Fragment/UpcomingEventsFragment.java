@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import com.example.mukesh.myapplication.POJO.EventDetails;
 import com.example.mukesh.myapplication.POJO.UpcomingEventInfo;
 import com.example.mukesh.myapplication.R;
+import com.example.mukesh.myapplication.UpComingEventTabAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -64,6 +67,11 @@ public class UpcomingEventsFragment extends Fragment {
         List<UpcomingEventInfo> upcomingEventInfos = new Gson().fromJson(upcomingEventInfosStr, new TypeToken<List<UpcomingEventInfo>>() {
         }.getType());
         Log.i("upcomingEventInfosStr", upcomingEventInfosStr);
+
+        RecyclerView recyclerView = view.findViewById(R.id.upcomingEventItemList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setAdapter(new UpComingEventTabAdapter(upcomingEventInfos));
+
         return view;
     }
 }

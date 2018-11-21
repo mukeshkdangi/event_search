@@ -37,5 +37,7 @@ dependencies {
     implementation 'com.android.support:customtabs:28.0.0'
     implementation 'org.projectlombok:lombok:1.18.4'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
 }

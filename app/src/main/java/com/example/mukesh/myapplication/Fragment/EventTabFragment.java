@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +17,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.mukesh.myapplication.DelayedProgressDialog;
+import com.example.mukesh.myapplication.EventTabAdapter;
 import com.example.mukesh.myapplication.POJO.EventDetails;
+import com.example.mukesh.myapplication.POJO.EventTabDataList;
 import com.example.mukesh.myapplication.POJO.EventTabInfo;
 import com.example.mukesh.myapplication.POJO.VenueTabInfo;
 import com.example.mukesh.myapplication.R;
@@ -29,6 +33,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -74,56 +80,56 @@ public class EventTabFragment extends Fragment {
         progressDialog.cancel();
 
         view = inflater.inflate(R.layout.fragment_event_tab, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.eventItemList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        List<EventTabDataList> eventTabDataListList = new ArrayList<>();
+        EventTabDataList eventTabDataList = new EventTabDataList();
+        eventTabDataList.setKey("Artists/Team");
+        eventTabDataList.setValue(eventTabInfo.getArtistName());
+        eventTabDataListList.add(eventTabDataList);
+
+        eventTabDataList = new EventTabDataList();
+        eventTabDataList.setKey("Venue");
+        eventTabDataList.setValue(eventTabInfo.getVenueName());
+        eventTabDataListList.add(eventTabDataList);
+
+
+        eventTabDataList = new EventTabDataList();
+        eventTabDataList.setKey("Time");
+        eventTabDataList.setValue(eventTabInfo.getTime());
+        eventTabDataListList.add(eventTabDataList);
+
+
+        eventTabDataList = new EventTabDataList();
+        eventTabDataList.setKey("Category");
+        eventTabDataList.setValue(eventTabInfo.getCategory());
+        eventTabDataListList.add(eventTabDataList);
+
+
+        eventTabDataList = new EventTabDataList();
+        eventTabDataList.setKey("Price Range");
+        eventTabDataList.setValue(eventTabInfo.getPriceRange());
+        eventTabDataListList.add(eventTabDataList);
+
+
+        eventTabDataList = new EventTabDataList();
+        eventTabDataList.setKey("Buy Ticket at");
+        eventTabDataList.setValue(eventTabInfo.getBuyTicketUrl());
+        eventTabDataListList.add(eventTabDataList);
+
+
+        eventTabDataList = new EventTabDataList();
+        eventTabDataList.setKey("Seat Map");
+        eventTabDataList.setValue(eventTabInfo.getSeatMapUrl());
+        eventTabDataListList.add(eventTabDataList);
+
+        recyclerView.setAdapter(new EventTabAdapter(eventTabDataListList));
+
         fragmentTransaction = getFragmentManager();
         appContext = getActivity().getApplicationContext();
         fragm = EventTabFragment.this;
 
-        TextView eventKey = view.findViewById(R.id.artist_key);
-        eventKey.setText("Artist/Teams(s)");
-
-        TextView eventKey1 = view.findViewById(R.id.artist_value);
-        eventKey1.setText(eventTabInfo.getArtistName());
-
-        TextView eventKey2 = view.findViewById(R.id.venue_key);
-        eventKey2.setText("Venue");
-
-        TextView eventKey3 = view.findViewById(R.id.venue_value);
-        eventKey3.setText(eventTabInfo.getVenueName());
-
-
-        TextView eventKey4 = view.findViewById(R.id.time_key);
-        eventKey4.setText("Time ");
-
-        TextView eventKey5 = view.findViewById(R.id.time_value);
-        eventKey5.setText(eventTabInfo.getTime());
-
-
-        TextView eventKey6  = view.findViewById(R.id.category_key);
-        eventKey6.setText("Category");
-
-        TextView eventKey7 = view.findViewById(R.id.category_value);
-        eventKey7.setText(eventTabInfo.getCategory());
-
-
-        eventKey = view.findViewById(R.id.price_key);
-        eventKey.setText("Price Range");
-
-        eventKey = view.findViewById(R.id.price_value);
-        eventKey.setText(eventTabInfo.getPriceRange());
-
-
-        eventKey = view.findViewById(R.id.buyTicketAt_key);
-        eventKey.setText("Buy Ticket At");
-
-        eventKey = view.findViewById(R.id.buyTicketAt_value);
-        eventKey.setText(eventTabInfo.getBuyTicketUrl());
-
-
-        eventKey = view.findViewById(R.id.seatMap_key);
-        eventKey.setText("Seat Map");
-
-        eventKey = view.findViewById(R.id.seatMap_value);
-        eventKey.setText(eventTabInfo.getSeatMapUrl());
 
         Log.i("getEventTabDetails", new Gson().toJson(eventTabInfo));
         return view;

@@ -28,10 +28,12 @@
             android:singleLine="false"
             android:textAlignment="textStart"
             android:textSize="13dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/category_key"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/keyword_error" />
+
 
         <TextView
             android:id="@+id/keyword_key"
@@ -50,6 +52,24 @@
             app:layout_constraintVertical_bias="0.51"
             app:layout_constraintVertical_chainStyle="spread_inside" />
 
+
+        <android.support.v7.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/auto_complete_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_margin="10dp"
+            android:inputType="text"
+            android:maxLines="1" />
+
+        <TextView
+            android:id="@+id/selected_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/auto_complete_edit_text"
+            android:layout_marginTop="50dp"
+            android:padding="20dp" />
+
         <Spinner
             android:id="@+id/category_spinner"
             android:layout_width="0dp"
@@ -64,12 +84,13 @@
 
         <TextView
             android:id="@+id/category_key"
-            android:layout_width="57dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginEnd="319dp"
+            android:paddingTop="20dp"
             android:text="Category"
             android:textSize="10sp"
+
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/category_spinner"
             app:layout_constraintEnd_toEndOf="parent"
@@ -99,8 +120,8 @@
             android:layout_marginTop="3dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:inputType="number"
             android:hint="10"
+            android:inputType="number"
             android:text="10"
             android:textAlignment="textStart"
             android:textSize="13dp"
@@ -142,6 +163,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:orientation="vertical"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/location_error"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -244,5 +266,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/radioLocation" />
 
+
     </android.support.constraint.ConstraintLayout>
+
 </ScrollView>

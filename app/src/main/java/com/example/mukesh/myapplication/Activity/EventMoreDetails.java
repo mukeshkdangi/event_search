@@ -55,6 +55,7 @@ public class EventMoreDetails extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
         fragMaanger = getSupportFragmentManager();
 
+        bundle.clear();
         EventMoreDetails.viewPagerAdapter = new ViewPagerAdapter(EventMoreDetails.fragMaanger, EventMoreDetails.bundle);
         EventMoreDetails.viewPagerAdapter.addFragment(new EventTabFragment(), "EVENT");
         EventMoreDetails.viewPagerAdapter.addFragment(new ArtistTabFragment(), "ARTIST(S)");
