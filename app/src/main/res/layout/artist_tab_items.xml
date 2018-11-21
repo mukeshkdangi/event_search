@@ -175,7 +175,7 @@
 
                     android:paddingTop="5dp"
 
-                    android:scaleType="centerCrop"
+                    android:scaleType="centerInside"
                     android:src="@drawable/img" />
 
             </TableRow>
@@ -208,7 +208,7 @@
                     android:layout_gravity="center"
                     android:adjustViewBounds="true"
 
-                    android:scaleType="centerCrop"
+                    android:scaleType="centerInside"
                     android:src="@drawable/img" />
             </TableRow>
 
@@ -224,7 +224,7 @@
                     android:layout_gravity="center"
                     android:adjustViewBounds="true"
 
-                    android:scaleType="centerCrop"
+                    android:scaleType="centerInside"
                     android:src="@drawable/img" />
             </TableRow>
 
@@ -474,7 +474,7 @@
                     android:adjustViewBounds="true"
                     android:paddingTop="5dp"
 
-                    android:scaleType="centerCrop"
+                    android:scaleType="centerInside"
                     android:src="@drawable/img" />
 
             </TableRow>

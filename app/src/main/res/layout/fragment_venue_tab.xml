@@ -5,11 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.VenueTabFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:id="@+id/venue_text"
-        android:layout_height="match_parent"
-        android:text="venue fragment" />
+        android:layout_height="193dp"
+        android:clickable="true"
+        android:enabled="true" />
 
 </FrameLayout>

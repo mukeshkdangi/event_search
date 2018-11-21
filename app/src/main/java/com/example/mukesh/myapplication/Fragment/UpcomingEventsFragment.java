@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -30,6 +31,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,15 +69,15 @@ public class UpcomingEventsFragment extends Fragment {
             return view;
         }
 
-        List<UpcomingEventInfo> upcomingEventInfos = new Gson().fromJson(upcomingEventInfosStr, new TypeToken<List<UpcomingEventInfo>>() {
+        final List<UpcomingEventInfo> upcomingEventInfos = new Gson().fromJson(upcomingEventInfosStr, new TypeToken<List<UpcomingEventInfo>>() {
         }.getType());
+
         Log.i("upcomingEventInfosStr", upcomingEventInfosStr);
 
         Spinner spinner = view.findViewById(R.id.order_spinner);
 
         List<String> categories = new ArrayList<>();
         categories.add("Default");
-        categories.add("Music");
         categories.add("Event Name");
         categories.add("Time");
         categories.add("Artist");
@@ -84,7 +87,7 @@ public class UpcomingEventsFragment extends Fragment {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
-        spinner = view.findViewById(R.id.order_type_spinner);
+        Spinner spinnerOrderType = view.findViewById(R.id.order_type_spinner);
 
         List<String> OrderType = new ArrayList<>();
         OrderType.add("Ascending");
@@ -92,12 +95,90 @@ public class UpcomingEventsFragment extends Fragment {
 
         ArrayAdapter<String> OrderTypedataAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, OrderType);
         OrderTypedataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(OrderTypedataAdapter);
+        spinnerOrderType.setAdapter(OrderTypedataAdapter);
 
 
         RecyclerView recyclerView = view.findViewById(R.id.upcomingEventItemList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(new UpComingEventTabAdapter(upcomingEventInfos));
+
+        Collections.reverse(upcomingEventInfos);
+        spinnerOrderType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view2, int position, long id) {
+                Collections.reverse(upcomingEventInfos);
+                RecyclerView recyclerView = view.findViewById(R.id.upcomingEventItemList);
+                recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+                recyclerView.setAdapter(new UpComingEventTabAdapter(upcomingEventInfos));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                switch (position) {
+
+                    case 1:
+                        Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
+
+                            public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
+                                return o1.getEventName().compareTo(o2.getEventName());
+                            }
+                        });
+                        break;
+                    case 2:
+                        Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
+
+                            public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
+                                return o1.getDate().compareTo(o2.getDate());
+                            }
+                        });
+                        break;
+
+                    case 0:
+                        Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
+
+                            public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
+                                return o1.getDate().compareTo(o2.getDate());
+                            }
+                        });
+                        break;
+
+                    case 4:
+                        Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
+
+                            public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
+                                return o1.getType().compareTo(o2.getType());
+                            }
+                        });
+                        break;
+
+                    case 3:
+                        Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
+
+                            public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
+                                return o1.getArtistName().compareTo(o2.getArtistName());
+                            }
+                        });
+                        break;
+                }
+
+                RecyclerView recyclerView = view.findViewById(R.id.upcomingEventItemList);
+                recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+                recyclerView.setAdapter(new UpComingEventTabAdapter(upcomingEventInfos));
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return view;
     }

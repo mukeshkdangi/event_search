@@ -1,6 +1,7 @@
 package com.example.mukesh.myapplication.Fragment;
 
 
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +17,15 @@ import android.widget.Toast;
 import com.example.mukesh.myapplication.POJO.EventDetails;
 import com.example.mukesh.myapplication.POJO.VenueTabInfo;
 import com.example.mukesh.myapplication.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -25,6 +35,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,6 +44,17 @@ import java.util.Objects;
  */
 public class VenueTabFragment extends Fragment {
     GetVenueTabDetails getVenueTabDetails;
+
+    MapView mapView;
+    private GoogleMap googleMap;
+    Location location;
+    private static final LatLng ONE = new LatLng(34.882216, -118.222028);
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+      //  mapView.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +65,11 @@ public class VenueTabFragment extends Fragment {
     public VenueTabFragment() {
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        //mapView.onPause();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,10 +80,30 @@ public class VenueTabFragment extends Fragment {
         if (Objects.isNull(venueTabInfoStr)) {
             return view;
         }
+        mapView = view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                setUpMap(googleMap);
+            }
+        });
+
         VenueTabInfo eventDetail = new Gson().fromJson(venueTabInfoStr, VenueTabInfo.class);
         Log.i("eventDetail", new Gson().toJson(eventDetail));
 
         return view;
+    }
+
+    private void setUpMap(GoogleMap map) {
+        googleMap = map;
+        List<LatLng> coords = new ArrayList<>();
+        coords.add(ONE);
+        for (int i = 0; i < coords.size(); i++) {
+            googleMap.addMarker(new MarkerOptions()
+                    .position(coords.get(i))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        }
     }
 
 
