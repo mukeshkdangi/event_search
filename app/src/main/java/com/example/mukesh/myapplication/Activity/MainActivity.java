@@ -122,8 +122,6 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 10);
         }
 
-        setContentView(R.layout.activity_main);
-
         final AppCompatAutoCompleteTextView autoCompleteTextView =
                 findViewById(R.id.auto_complete_edit_text);
         final TextView selectedText = findViewById(R.id.selected_item);
@@ -184,10 +182,10 @@ public class MainActivity extends AppCompatActivity {
                 List<String> stringList = new ArrayList<>();
                 try {
                     JSONObject responseObject = new JSONObject(response);
-                    JSONArray array = responseObject.getJSONArray("results");
+                    JSONArray array = responseObject.optJSONObject("_embedded").getJSONArray("attractions");
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject row = array.getJSONObject(i);
-                        stringList.add(row.getString("trackName"));
+                        stringList.add(row.getString("name"));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -210,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
 
         Pattern p = Pattern.compile("[^a-zA-Z0-9 ]");
         boolean isInValidInput = false;
-        String keyword = ((EditText) findViewById(R.id.keyword)).getText().toString();
+        String keyword = ((EditText) findViewById(R.id.auto_complete_edit_text)).getText().toString();
         if (keyword == null || keyword.length() <= 0 || p.matcher(keyword).find()) {
             findViewById(R.id.keyword_error).setVisibility(View.VISIBLE);
             isInValidInput = true;

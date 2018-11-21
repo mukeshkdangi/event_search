@@ -39,4 +39,6 @@
         <item name="android:textSize">20dp</item>
     </string>
 
+    <string name="spotify"><u>Spotify</u>.</string>
+
 </resources>

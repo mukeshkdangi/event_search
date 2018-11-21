@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.mukesh.myapplication.POJO.UpcomingEventInfo;
 
 import java.util.List;
+import java.util.Objects;
 
 public class UpComingEventTabAdapter extends RecyclerView.Adapter<UpComingEventTabAdapter.UpComingEventTabViewolder> {
 
@@ -30,8 +31,16 @@ public class UpComingEventTabAdapter extends RecyclerView.Adapter<UpComingEventT
     @Override
     public void onBindViewHolder(@NonNull UpComingEventTabViewolder upComingEventTabViewolder, int pos) {
         upComingEventTabViewolder.eventName.setText(upcomingEventInfos.get(pos).getEventName());
-        upComingEventTabViewolder.artistName.setText(upcomingEventInfos.get(pos).getArtistName());
-        upComingEventTabViewolder.date.setText(upcomingEventInfos.get(pos).getDate());
+        if (Objects.nonNull(upcomingEventInfos.get(pos).getArtistName())) {
+            upComingEventTabViewolder.artistName.setText(upcomingEventInfos.get(pos).getArtistName());
+        } else {
+            upComingEventTabViewolder.artistName.setVisibility(View.GONE);
+        }
+        if (Objects.nonNull(upcomingEventInfos.get(pos).getDate())) {
+            upComingEventTabViewolder.date.setText(upcomingEventInfos.get(pos).getDate());
+        } else {
+            upComingEventTabViewolder.date.setVisibility(View.GONE);
+        }
         upComingEventTabViewolder.type.setText(upcomingEventInfos.get(pos).getType());
     }
 

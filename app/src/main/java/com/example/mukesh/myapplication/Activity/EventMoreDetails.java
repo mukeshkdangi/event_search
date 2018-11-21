@@ -13,6 +13,7 @@ import com.example.mukesh.myapplication.Fragment.ArtistTabFragment;
 import com.example.mukesh.myapplication.Fragment.EventTabFragment;
 import com.example.mukesh.myapplication.Fragment.UpcomingEventsFragment;
 import com.example.mukesh.myapplication.Fragment.VenueTabFragment;
+import com.example.mukesh.myapplication.POJO.ArtistImageInfo;
 import com.example.mukesh.myapplication.POJO.EventDetails;
 import com.example.mukesh.myapplication.POJO.EventTabInfo;
 import com.example.mukesh.myapplication.POJO.SpotifyInfo;
@@ -142,7 +143,7 @@ class GetEventTabDetails extends AsyncTask<String, Integer, String> {
             if (Objects.nonNull(attractionsJson)) {
                 for (int idx = 0; idx < attractionsJson.length(); idx++) {
                     if (idx > 1) {
-                        stringBuilder.append("|");
+                        stringBuilder.append(" | ");
                     }
                     stringBuilder.append(attractionsJson.getJSONObject(idx).getString("name"));
 
@@ -153,13 +154,19 @@ class GetEventTabDetails extends AsyncTask<String, Integer, String> {
             eventTabInfo.setVenueName(venueJson.getString("name"));
 
             JSONObject dateObject = EventDetailsJson.getJSONObject("dates").getJSONObject("start");
-            eventTabInfo.setEventName(dateObject.getString("localDate") + " " + dateObject.getString("localTime"));
+            eventTabInfo.setTime(dateObject.getString("localDate") + "  " + dateObject.getString("localTime"));
             JSONObject categoryJson = EventDetailsJson.getJSONArray("classifications").getJSONObject(0);
             eventTabInfo.setCategory(categoryJson.getJSONObject("segment").getString("name") + " | " + categoryJson.getJSONObject("genre").getString("name"));
             eventTabInfo.setTicketStatus(EventDetailsJson.getJSONObject("dates").getJSONObject("status").getString("code"));
             eventTabInfo.setBuyTicketUrl(EventDetailsJson.getString("url"));
-            eventTabInfo.setSeatMapUrl(EventDetailsJson.getJSONObject("seatmap").getString("staticUrl"));
+            if (EventDetailsJson.optJSONObject("seatmap") != null && Objects.nonNull(EventDetailsJson.getJSONObject("seatmap").getString("staticUrl")))
+                eventTabInfo.setSeatMapUrl(EventDetailsJson.getJSONObject("seatmap").getString("staticUrl"));
 
+            if (Objects.nonNull(EventDetailsJson.optJSONArray("priceRanges")) && (EventDetailsJson.optJSONArray("priceRanges").length() > 0)) {
+                String minPrice = EventDetailsJson.optJSONArray("priceRanges").getJSONObject(0).optString("min");
+                String maxPrice = EventDetailsJson.optJSONArray("priceRanges").getJSONObject(0).optString("max");
+                eventTabInfo.setPriceRange("$" + minPrice + " ~ $" + maxPrice);
+            }
             // Building Venue Object
             venueTabInfo.setVenueName(eventTabInfo.getVenueName());
             venueTabInfo.setAddress(venueJson.getJSONObject("address").getString("line1"));
@@ -192,7 +199,7 @@ class GetArtistTabDetails extends AsyncTask<String, Integer, String> {
 
     EventDetails eventDetail;
     List<SpotifyInfo> artistInfo;
-    List<List<String>> artistImages;
+    List<ArtistImageInfo> artistImageInfoList;
 
     @Override
     protected String doInBackground(String... strings) {
@@ -241,9 +248,12 @@ class GetArtistTabDetails extends AsyncTask<String, Integer, String> {
                 }
                 JSONObject categoryJson = EventDetailsJson.getJSONArray("classifications").getJSONObject(0);
                 String categoryName = categoryJson.getJSONObject("segment").getString("name");
-                artistImages = new ArrayList<>();
+                artistImageInfoList = new ArrayList<>();
 
                 for (int idx = 0; idx < attractionList.size(); idx++) {
+                    ArtistImageInfo artistImageInfo = new ArtistImageInfo();
+                    artistImageInfo.setArtistName(attractionList.get(idx));
+
                     urlBuilder = new StringBuilder();
                     urlBuilder.append("http://100.26.198.168:3000/api/google/getimages/");
                     urlBuilder.append(attractionList.get(idx));
@@ -274,10 +284,11 @@ class GetArtistTabDetails extends AsyncTask<String, Integer, String> {
                         for (int img = 0; img < imageJsonArray.length(); img++) {
                             images.add(imageJsonArray.getJSONObject(img).getString("link"));
                         }
-                        artistImages.add(images);
+                        artistImageInfo.setArtistImagesList(images);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    artistImageInfoList.add(artistImageInfo);
                 }
 
 
@@ -347,7 +358,7 @@ class GetArtistTabDetails extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPostExecute(String eventTabResults) {
         EventMoreDetails.bundle.putString("artistInfo", new Gson().toJson(artistInfo));
-        EventMoreDetails.bundle.putString("artistImages", new Gson().toJson(artistImages));
+        EventMoreDetails.bundle.putString("artistImages", new Gson().toJson(artistImageInfoList));
 
     }
 }
@@ -440,6 +451,7 @@ class GetUpcomingTabDetails extends AsyncTask<String, Integer, String> {
                 upcomingEventInfo.setDate(date);
                 upcomingEventInfo.setEventName(displayName);
                 upcomingEventInfo.setUrl(url);
+                upcomingEventInfo.setType("Type :" + upcomingEventJsonArr.getJSONObject(idx).optString("type"));
                 upcomingEventInfos.add(upcomingEventInfo);
             }
         } catch (Exception e) {

@@ -49,7 +49,7 @@
             android:layout_height="match_parent"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
-            android:textColor="@color/grey"
+            android:textColor="@color/black"
             android:text="textview2"
             android:textSize="14sp" />
     </LinearLayout>

@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.example.mukesh.myapplication.POJO.EventDetails;
 import com.example.mukesh.myapplication.POJO.UpcomingEventInfo;
@@ -56,7 +58,7 @@ public class UpcomingEventsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_upcoming_events, container, false);
+        view = inflater.inflate(R.layout.upcomging_event_parent_view, container, false);
 
         String upcomingEventInfosStr = getArguments().getString("upcomingEventInfos");
 
@@ -67,6 +69,31 @@ public class UpcomingEventsFragment extends Fragment {
         List<UpcomingEventInfo> upcomingEventInfos = new Gson().fromJson(upcomingEventInfosStr, new TypeToken<List<UpcomingEventInfo>>() {
         }.getType());
         Log.i("upcomingEventInfosStr", upcomingEventInfosStr);
+
+        Spinner spinner = view.findViewById(R.id.order_spinner);
+
+        List<String> categories = new ArrayList<>();
+        categories.add("Default");
+        categories.add("Music");
+        categories.add("Event Name");
+        categories.add("Time");
+        categories.add("Artist");
+        categories.add("Type");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, categories);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+
+        spinner = view.findViewById(R.id.order_type_spinner);
+
+        List<String> OrderType = new ArrayList<>();
+        OrderType.add("Ascending");
+        OrderType.add("Descending");
+
+        ArrayAdapter<String> OrderTypedataAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, OrderType);
+        OrderTypedataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(OrderTypedataAdapter);
+
 
         RecyclerView recyclerView = view.findViewById(R.id.upcomingEventItemList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));

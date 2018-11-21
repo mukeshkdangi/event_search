@@ -10,7 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.mukesh.myapplication.POJO.ArtistImageInfo;
 import com.example.mukesh.myapplication.POJO.EventDetails;
 import com.example.mukesh.myapplication.POJO.SpotifyInfo;
 import com.example.mukesh.myapplication.R;
@@ -50,7 +54,7 @@ public class ArtistTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_artist_tab, container, false);
+        View view = inflater.inflate(R.layout.artist_tab_items, container, false);
 
         String artistInfoStr = getArguments().getString("artistInfo");
         String artistImagesStr = getArguments().getString("artistImages");
@@ -61,8 +65,245 @@ public class ArtistTabFragment extends Fragment {
 
         List<SpotifyInfo> artistInfo = new Gson().fromJson(artistInfoStr, new TypeToken<List<SpotifyInfo>>() {
         }.getType());
-        List<List<String>> artistImages = new Gson().fromJson(artistImagesStr, new TypeToken<List<List<String>>>() {
+        List<ArtistImageInfo> artistImages = new Gson().fromJson(artistImagesStr, new TypeToken<List<ArtistImageInfo>>() {
         }.getType());
+
+        try {
+            JSONArray jsonArray = new JSONArray(artistImagesStr);
+            for (int idx = 0; idx < jsonArray.length(); idx++) {
+                List<String> images = new ArrayList<>();
+                JSONArray artistImagesListJson = jsonArray.getJSONObject(idx).getJSONArray("artistImagesList");
+                for (int imgIdx = 0; imgIdx < artistImagesListJson.length(); imgIdx++) {
+                    images.add(artistImagesListJson.getString(imgIdx));
+                }
+                String artistName = jsonArray.getJSONObject(idx).optString("artistName");
+                if (idx == 0) {
+                    TextView textView = view.findViewById(R.id.artist_heading_1);
+                    textView.setText(artistName);
+
+                    if (Objects.nonNull(artistInfo) && artistInfo.size() > 0) {
+                        textView = view.findViewById(R.id.name_row_value_1);
+                        textView.setText(artistName);
+
+                        textView = view.findViewById(R.id.follower_row_value_1);
+                        textView.setText(artistInfo.get(idx).getFollowers());
+
+                        textView = view.findViewById(R.id.popularity_row_value_1);
+                        textView.setText(artistInfo.get(idx).getPopularity());
+
+                        textView = view.findViewById(R.id.checkat_row_key_value_1);
+                        textView.setText(artistInfo.get(idx).getSpotifyUrl());
+                    } else {
+                        view.findViewById(R.id.name_row_1).setVisibility(View.GONE);
+                        view.findViewById(R.id.follower_row_1).setVisibility(View.GONE);
+                        view.findViewById(R.id.popularity_row_1).setVisibility(View.GONE);
+                        view.findViewById(R.id.checkat_row_1).setVisibility(View.GONE);
+
+                    }
+                    if (images.size() > 0) {
+                        ImageView imageView = view.findViewById(R.id.image_1_1);
+                        Glide.with(view.getContext()).load(images.get(0)).into(imageView);
+
+                        if (images.size() > 1) {
+                            imageView = view.findViewById(R.id.image_1_2);
+                            Glide.with(view.getContext()).load(images.get(1)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_12).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 2) {
+                            imageView = view.findViewById(R.id.image_1_3);
+                            Glide.with(view.getContext()).load(images.get(2)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_13).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 3) {
+                            imageView = view.findViewById(R.id.image_1_4);
+                            Glide.with(view.getContext()).load(images.get(3)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_14).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 4) {
+                            imageView = view.findViewById(R.id.image_1_5);
+                            Glide.with(view.getContext()).load(images.get(4)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_15).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 5) {
+                            imageView = view.findViewById(R.id.image_1_6);
+                            Glide.with(view.getContext()).load(images.get(5)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_16).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 6) {
+                            imageView = view.findViewById(R.id.image_1_7);
+                            Glide.with(view.getContext()).load(images.get(6)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_17).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 7) {
+                            imageView = view.findViewById(R.id.image_1_8);
+                            Glide.with(view.getContext()).load(images.get(7)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_18).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 8) {
+                            imageView = view.findViewById(R.id.image_1_9);
+                            Glide.with(view.getContext()).load(images.get(7)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_19).setVisibility(View.GONE);
+                        }
+
+                    } else {
+                        view.findViewById(R.id.image_11).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_12).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_13).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_14).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_15).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_16).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_17).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_18).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_19).setVisibility(View.GONE);
+
+                    }
+
+                }
+                if (jsonArray.length() == 1) {
+                    view.findViewById(R.id.name_row_2).setVisibility(View.GONE);
+                    view.findViewById(R.id.follower_row_2).setVisibility(View.GONE);
+                    view.findViewById(R.id.popularity_row_2).setVisibility(View.GONE);
+                    view.findViewById(R.id.checkat_row_2).setVisibility(View.GONE);
+                    view.findViewById(R.id.image_21).setVisibility(View.GONE);
+                    view.findViewById(R.id.image_22).setVisibility(View.GONE);
+                    view.findViewById(R.id.image_23).setVisibility(View.GONE);
+                    view.findViewById(R.id.image_24).setVisibility(View.GONE);
+                    view.findViewById(R.id.image_25).setVisibility(View.GONE);
+                    view.findViewById(R.id.image_26).setVisibility(View.GONE);
+                    view.findViewById(R.id.image_27).setVisibility(View.GONE);
+                    view.findViewById(R.id.image_28).setVisibility(View.GONE);
+                    view.findViewById(R.id.image_29).setVisibility(View.GONE);
+
+                }
+                if (idx == 1) {
+                    TextView textView = view.findViewById(R.id.artist_heading_2);
+                    textView.setText(artistName);
+
+
+                    if (Objects.nonNull(artistInfo) && artistInfo.size() > 1) {
+                        textView = view.findViewById(R.id.name_row_value_2);
+                        textView.setText(artistName);
+
+                        textView = view.findViewById(R.id.follower_row_value_2);
+                        textView.setText(artistInfo.get(idx).getFollowers());
+
+                        textView = view.findViewById(R.id.popularity_row_value_2);
+                        textView.setText(artistInfo.get(idx).getPopularity());
+
+                        textView = view.findViewById(R.id.checkat_row_key_value_2);
+                        textView.setText(artistInfo.get(idx).getSpotifyUrl());
+                    } else {
+                        view.findViewById(R.id.name_row_2).setVisibility(View.GONE);
+                        view.findViewById(R.id.follower_row_2).setVisibility(View.GONE);
+                        view.findViewById(R.id.popularity_row_2).setVisibility(View.GONE);
+                        view.findViewById(R.id.checkat_row_2).setVisibility(View.GONE);
+                    }
+
+                    if (images.size() > 0) {
+                        ImageView imageView = view.findViewById(R.id.image_2_1);
+                        Glide.with(view.getContext()).load(images.get(0)).into(imageView);
+
+                        if (images.size() > 1) {
+                            imageView = view.findViewById(R.id.image_2_2);
+                            Glide.with(view.getContext()).load(images.get(1)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_22).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 2) {
+                            imageView = view.findViewById(R.id.image_2_3);
+                            Glide.with(view.getContext()).load(images.get(2)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_23).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 3) {
+                            imageView = view.findViewById(R.id.image_2_4);
+                            Glide.with(view.getContext()).load(images.get(3)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_24).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 4) {
+                            imageView = view.findViewById(R.id.image_2_5);
+                            Glide.with(view.getContext()).load(images.get(4)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_25).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 5) {
+                            imageView = view.findViewById(R.id.image_2_6);
+                            Glide.with(view.getContext()).load(images.get(5)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_26).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 6) {
+                            imageView = view.findViewById(R.id.image_2_7);
+                            Glide.with(view.getContext()).load(images.get(6)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_27).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 7) {
+                            imageView = view.findViewById(R.id.image_2_8);
+                            Glide.with(view.getContext()).load(images.get(7)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_28).setVisibility(View.GONE);
+                        }
+                        if (images.size() > 8) {
+                            imageView = view.findViewById(R.id.image_2_9);
+                            Glide.with(view.getContext()).load(images.get(7)).into(imageView);
+                        } else {
+                            view.findViewById(R.id.image_29).setVisibility(View.GONE);
+                        }
+
+                    } else {
+                        view.findViewById(R.id.image_21).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_22).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_23).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_24).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_25).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_26).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_27).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_28).setVisibility(View.GONE);
+                        view.findViewById(R.id.image_29).setVisibility(View.GONE);
+
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            view.findViewById(R.id.image_11).setVisibility(View.GONE);
+            view.findViewById(R.id.image_12).setVisibility(View.GONE);
+            view.findViewById(R.id.image_13).setVisibility(View.GONE);
+            view.findViewById(R.id.image_14).setVisibility(View.GONE);
+            view.findViewById(R.id.image_15).setVisibility(View.GONE);
+            view.findViewById(R.id.image_16).setVisibility(View.GONE);
+            view.findViewById(R.id.image_17).setVisibility(View.GONE);
+            view.findViewById(R.id.image_18).setVisibility(View.GONE);
+            view.findViewById(R.id.image_19).setVisibility(View.GONE);
+            view.findViewById(R.id.image_21).setVisibility(View.GONE);
+            view.findViewById(R.id.image_22).setVisibility(View.GONE);
+            view.findViewById(R.id.image_23).setVisibility(View.GONE);
+            view.findViewById(R.id.image_24).setVisibility(View.GONE);
+            view.findViewById(R.id.image_25).setVisibility(View.GONE);
+            view.findViewById(R.id.image_26).setVisibility(View.GONE);
+            view.findViewById(R.id.image_27).setVisibility(View.GONE);
+            view.findViewById(R.id.image_28).setVisibility(View.GONE);
+            view.findViewById(R.id.image_29).setVisibility(View.GONE);
+            view.findViewById(R.id.name_row_2).setVisibility(View.GONE);
+            view.findViewById(R.id.follower_row_2).setVisibility(View.GONE);
+            view.findViewById(R.id.popularity_row_2).setVisibility(View.GONE);
+            view.findViewById(R.id.checkat_row_2).setVisibility(View.GONE);
+            view.findViewById(R.id.name_row_1).setVisibility(View.GONE);
+            view.findViewById(R.id.follower_row_1).setVisibility(View.GONE);
+            view.findViewById(R.id.popularity_row_1).setVisibility(View.GONE);
+            view.findViewById(R.id.checkat_row_1).setVisibility(View.GONE);
+
+        }
 
 
         Log.i("artistInfo", new Gson().toJson(artistInfo));

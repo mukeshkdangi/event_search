@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+
         >
 
         <TextView
@@ -19,18 +20,13 @@
             android:layout_weight="1"
             android:textStyle="bold"
             android:textSize="15sp"
-            android:paddingLeft="20dp"
             android:paddingTop="10dp"
-            android:textAlignment="textStart"
-
             android:text="textview1" />
 
         <TextView
             android:id="@+id/value"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="20dp"
+            android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:textSize="15sp"
             android:layout_weight="3"
