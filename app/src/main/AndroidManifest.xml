@@ -35,13 +35,16 @@
             android:parentActivityName=".Activity.MainActivity" />
         <activity
             android:name=".Activity.EventMoreDetails"
+            android:label="Search Result"
             android:parentActivityName=".Activity.EventDetailsPage" />
         <activity android:name=".Activity.EmptyEventResult"></activity>
 
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
-        <meta-data android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyB8HS_iYmom5e72kHrzEddMBdoE4jPNvEw"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyB8HS_iYmom5e72kHrzEddMBdoE4jPNvEw" />
 
     </application>
 

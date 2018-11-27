@@ -1,7 +1,11 @@
 package com.example.mukesh.myapplication;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +34,16 @@ public class UpComingEventTabAdapter extends RecyclerView.Adapter<UpComingEventT
 
     @Override
     public void onBindViewHolder(@NonNull UpComingEventTabViewolder upComingEventTabViewolder, int pos) {
-        upComingEventTabViewolder.eventName.setText(upcomingEventInfos.get(pos).getEventName());
+
+        String text = "<a href='" + upcomingEventInfos.get(pos).getUrl() + "'> " + upcomingEventInfos.get(pos).getEventName() + " </a>";
+
+        upComingEventTabViewolder.eventName.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
+        upComingEventTabViewolder.eventName.setClickable(true);
+        upComingEventTabViewolder.eventName.setLinksClickable(true);
+        upComingEventTabViewolder.eventName.setAutoLinkMask(Linkify.WEB_URLS);
+        upComingEventTabViewolder.eventName.setMovementMethod(LinkMovementMethod.getInstance());
+        upComingEventTabViewolder.eventName.setLinkTextColor(Color.BLUE);
+
         if (Objects.nonNull(upcomingEventInfos.get(pos).getArtistName())) {
             upComingEventTabViewolder.artistName.setText(upcomingEventInfos.get(pos).getArtistName());
         } else {

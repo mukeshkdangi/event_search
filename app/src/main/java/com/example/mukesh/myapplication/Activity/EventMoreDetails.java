@@ -231,8 +231,6 @@ class GetArtistTabDetails extends AsyncTask<String, Integer, String> {
         }
 
 
-        ///
-
         {
             try {
                 JSONObject EventDetailsJson = new JSONObject(eventTabResultBuilder.toString());

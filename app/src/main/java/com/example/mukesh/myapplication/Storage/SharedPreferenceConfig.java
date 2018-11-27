@@ -28,8 +28,10 @@ public class SharedPreferenceConfig {
         SharedPreferences.Editor prefsEditor = this.sharedPreferences.edit();
         EventDetails eventDetails = new Gson().fromJson(details, EventDetails.class);
         eventDetails.setFav(true);
+        details = new Gson().toJson(eventDetails);
         prefsEditor.putString(eventDetails.getEventId(), details);
         prefsEditor.commit();
+        loadSharedPreferencesLogList();
     }
 
     public List<EventDetails> loadSharedPreferencesLogList() {
@@ -55,6 +57,7 @@ public class SharedPreferenceConfig {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.remove(eventDetails.getEventId());
         editor.commit();
+        loadSharedPreferencesLogList();
     }
 
 

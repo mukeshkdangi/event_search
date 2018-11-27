@@ -1,5 +1,6 @@
 package com.example.mukesh.myapplication;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -20,25 +21,26 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
-public class EventDetailsAdaptor extends RecyclerView.Adapter<EventDetailsAdaptor.EventDetailsViewHolder>
+public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetailsAdaptor.EventDetailsViewHolder>
 
 {
     private List<EventDetails> eventDetailList;
     private Context context;
     private List<EventDetails> localStorage;
     SharedPreferenceConfig sharedPreferenceConfig;
+    View view;
 
-    public EventDetailsAdaptor(List<EventDetails> eventDetailList, Context context) {
+    public FavEventDetailsAdaptor(List<EventDetails> eventDetailList, Context context) {
         this.eventDetailList = eventDetailList;
         this.context = context;
-        sharedPreferenceConfig = new SharedPreferenceConfig(EventDetailsAdaptor.this.context);
+        sharedPreferenceConfig = new SharedPreferenceConfig(FavEventDetailsAdaptor.this.context);
         localStorage = sharedPreferenceConfig.loadSharedPreferencesLogList();
     }
 
     @NonNull
     @Override
     public EventDetailsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_layout, viewGroup, false);
+        view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fav_item_layout, viewGroup, false);
         EventDetailsViewHolder eventDetailsViewHolder = new EventDetailsViewHolder(view, context, eventDetailList, this);
         return eventDetailsViewHolder;
     }
@@ -64,21 +66,32 @@ public class EventDetailsAdaptor extends RecyclerView.Adapter<EventDetailsAdapto
 
         viewHolder.eventDate.setText(eventDetail.getEventDate());
 
-        boolean isAlreadyFav = isThisFavEvent(eventDetail.getEventId());
-        viewHolder.favIcon.setImageResource(isAlreadyFav ? R.drawable.heart_fill_red : R.drawable.heart_outline_black);
-        eventDetail.setFav(isAlreadyFav);
+        viewHolder.favIcon.setImageResource(R.drawable.heart_fill_red);
+        eventDetail.setFav(true);
         viewHolder.favIcon.setTag(new Gson().toJson(eventDetail));
         viewHolder.eventId.setText(eventDetail.getEventId());
     }
 
-    private boolean isThisFavEvent(String eventId) {
-        for (int idx = 0; idx < localStorage.size(); idx++) {
-            if (localStorage.get(idx).getEventId().equalsIgnoreCase(eventId)) {
-                Log.i("Fav found  from local storage ", "Yes ");
-                return true;
-            }
-        }
-        return false;
+    public void setUpdateChange(List<EventDetails> eventDetails) {
+        eventDetailList = eventDetails;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        view = recyclerView;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
+
+    public void removeItem(int position) {
+        eventDetailList.remove(position);
+        notifyItemRemoved(position);
     }
 
     @Override
@@ -86,26 +99,25 @@ public class EventDetailsAdaptor extends RecyclerView.Adapter<EventDetailsAdapto
         return eventDetailList.size();
     }
 
-
     public static class EventDetailsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView eventName;
-        public TextView eventVenue;
-        public TextView eventDate;
-        public ImageView eventIcon;
-        public ImageView favIcon;
-        public TextView eventId;
-        public Context context;
-        public List<EventDetails> eventDetails;
-        public SharedPreferenceConfig sharedPreferenceConfig;
-        public EventDetailsAdaptor eventDetailsAdaptor;
+        TextView eventName;
+        TextView eventVenue;
+        TextView eventDate;
+        ImageView eventIcon;
+        ImageView favIcon;
+        TextView eventId;
+        Context context;
+        List<EventDetails> eventDetails;
+        SharedPreferenceConfig sharedPreferenceConfig;
+        private FavEventDetailsAdaptor favEventDetailsAdaptor;
 
 
-        public EventDetailsViewHolder(@NonNull View itemView, Context context, List<EventDetails> eventDetails, EventDetailsAdaptor eventDetailsAdaptor) {
+        public EventDetailsViewHolder(@NonNull View itemView, Context context, List<EventDetails> eventDetails, FavEventDetailsAdaptor favEventDetailsAdaptor) {
             super(itemView);
             this.context = context;
             this.eventDetails = eventDetails;
-            this.eventDetailsAdaptor = eventDetailsAdaptor;
+            this.favEventDetailsAdaptor = favEventDetailsAdaptor;
 
             eventName = itemView.findViewById(R.id.event_name);
             eventVenue = itemView.findViewById(R.id.event_venue);
@@ -132,23 +144,17 @@ public class EventDetailsAdaptor extends RecyclerView.Adapter<EventDetailsAdapto
                 sharedPreferenceConfig = new SharedPreferenceConfig(EventDetailsViewHolder.this.context);
 
                 if (eventDetailTmp.isFav()) {
+                    favEventDetailsAdaptor.removeItem(getAdapterPosition());
                     eventDetailTmp.setFav(false);
                     img.setImageResource(R.drawable.heart_outline_black);
                     sharedPreferenceConfig.removeFromSharedPref(new Gson().toJson(eventDetailTmp));
-                    Toast toast = Toast.makeText(this.context, eventDetailTmp.getEventName() + "was removed to favorites",
-                            Toast.LENGTH_LONG);
-                    TextView text = toast.getView().findViewById(android.R.id.message);
-                    text.setBackgroundResource(R.drawable.dialog_bg);
-                    toast.show();
-                    img.setTag(new Gson().toJson(eventDetailTmp));
                     return;
                 }
 
-
                 img.setImageResource(R.drawable.heart_fill_red);
                 eventDetailTmp.setFav(true);
-
                 sharedPreferenceConfig.saveSharedPreferencesLogList(new Gson().toJson(eventDetailTmp));
+
                 Toast toast = Toast.makeText(this.context, eventDetailTmp.getEventName() + "was added to favorites",
                         Toast.LENGTH_LONG);
                 TextView text = toast.getView().findViewById(android.R.id.message);
@@ -165,6 +171,7 @@ public class EventDetailsAdaptor extends RecyclerView.Adapter<EventDetailsAdapto
             }
         }
 
+
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(context, EventMoreDetails.class);
@@ -173,6 +180,5 @@ public class EventDetailsAdaptor extends RecyclerView.Adapter<EventDetailsAdapto
 
         }
     }
-
-
 }
+

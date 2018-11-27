@@ -2,6 +2,7 @@ package com.example.mukesh.myapplication;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
@@ -40,8 +41,19 @@ public class EventTabAdapter extends RecyclerView.Adapter<EventTabAdapter.EventT
             viewHolder.key.setText(key);
             viewHolder.value.setText(val);
             if (val.contains("http")) {
-                Linkify.addLinks(viewHolder.value, Linkify.WEB_URLS);
                 viewHolder.value.setMovementMethod(LinkMovementMethod.getInstance());
+                String text = "";
+                if (val.contains("event")) {
+                    text = "<a href='" + val + "'> Ticketmaster </a>";
+                } else if (val.contains("venue/maps")) {
+                    text = "<a href='" + val + "'> View Here </a>";
+                }
+                viewHolder.value.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
+
+                viewHolder.value.setClickable(true);
+                viewHolder.value.setAutoLinkMask(Linkify.ALL);
+                viewHolder.value.setLinksClickable(true);
+
             }
         } else {
             viewHolder.key.setVisibility(View.GONE);

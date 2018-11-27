@@ -16,256 +16,44 @@
         tools:context=".Activity.MainActivity">
 
 
-        <EditText
-            android:id="@+id/keyword"
-            android:layout_width="355dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="20dp"
-            android:ems="10"
-            android:hint="Enter keyword"
-            android:inputType="textPersonName"
-            android:singleLine="false"
-            android:textAlignment="textStart"
-            android:textSize="13dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/category_key"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/keyword_error" />
-
-
-        <TextView
-            android:id="@+id/keyword_key"
-            android:layout_width="wrap_content"
-            android:layout_height="17dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="337dp"
-            android:text="Keyword"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/keyword_error"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.51"
-            app:layout_constraintVertical_chainStyle="spread_inside" />
-
-
-        <android.support.v7.widget.AppCompatAutoCompleteTextView
-            android:id="@+id/auto_complete_edit_text"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_margin="10dp"
-            android:inputType="text"
-            android:maxLines="1" />
-
-        <TextView
-            android:id="@+id/selected_item"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/auto_complete_edit_text"
-            android:layout_marginTop="50dp"
-            android:padding="20dp" />
-
-        <Spinner
-            android:id="@+id/category_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/distance_key"
+            android:layout_height="108dp"
+            android:background="@color/colorPrimary"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/category_key" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/category_key"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginEnd="319dp"
-            android:paddingTop="20dp"
-            android:text="Category"
-            android:textSize="10sp"
+            <include
+                layout="@layout/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/category_spinner"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/keyword" />
-
-        <TextView
-            android:id="@+id/distance_key"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="337dp"
-            android:layout_marginBottom="2dp"
-            android:text="Distance"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/distance"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/category_spinner" />
-
-        <EditText
-            android:id="@+id/distance"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:hint="10"
-            android:inputType="number"
-            android:text="10"
-            android:textAlignment="textStart"
-            android:textSize="13dp"
-            app:layout_constraintBottom_toTopOf="@+id/unit_spinner"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.52"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/distance_key" />
-
-        <Spinner
-            android:id="@+id/unit_spinner"
-            android:layout_width="368dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/from_key"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/distance" />
-
-        <TextView
-            android:id="@+id/from_key"
-            android:layout_width="47dp"
-            android:layout_height="15dp"
-            android:layout_marginStart="9dp"
-            android:layout_marginEnd="328dp"
-            android:text="From"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/radioLocation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/unit_spinner" />
-
-        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/radioLocation"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:orientation="vertical"
-            android:paddingTop="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/location_error"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/from_key">
-
-            <RadioButton
-                android:id="@+id/from_here"
-                android:layout_width="147dp"
-                android:layout_height="22dp"
-                android:checked="true"
-                android:text="Current Location"
-                android:textAlignment="textStart"
-                android:textSize="10sp" />
-
-            <RadioButton
-                android:id="@+id/from_other"
-                android:layout_width="207dp"
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Other, Specify location"
-                android:textAlignment="textStart"
-                android:textSize="10sp" />
-        </RadioGroup>
+                android:background="@color/colorPrimary"
+                app:tabGravity="fill"
+                app:tabMode="fixed"></android.support.design.widget.TabLayout>
+        </android.support.design.widget.AppBarLayout>
 
-        <EditText
-            android:id="@+id/location_desc"
-            android:layout_width="367dp"
-            android:layout_height="37dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="2dp"
-            android:ems="10"
-            android:enabled="false"
-            android:hint="Type in the Location"
-            android:inputType="textPersonName"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toTopOf="@+id/search_bn"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="464dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/location_error" />
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-        <Button
-            android:id="@+id/search_bn"
-            android:layout_width="184dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginEnd="8dp"
-            android:onClick="searchEvents"
-            android:text="Search"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toStartOf="@+id/clear_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/location_desc" />
-
-        <Button
-            android:id="@+id/clear_button"
-            android:layout_width="165dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="CLEAR"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/search_bn"
-            app:layout_constraintTop_toBottomOf="@+id/location_desc" />
-
-        <TextView
-            android:id="@+id/keyword_error"
-            android:layout_width="wrap_content"
-            android:layout_height="10dp"
-            android:layout_marginStart="8dp"
-            android:text="Please enter mandatory filed"
-            android:textAlignment="textStart"
-            android:textColor="@color/colorAccent"
-            android:textSize="8dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@+id/keyword"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/keyword_key" />
-
-        <TextView
-            android:id="@+id/location_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="248dp"
-            android:layout_marginBottom="8dp"
-            android:text="Please enter mandatory filed"
-            android:textAlignment="textStart"
-            android:textColor="@color/colorAccent"
-            android:textSize="10sp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@+id/location_desc"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioLocation" />
-
+        </android.support.v4.view.ViewPager>
 
     </android.support.constraint.ConstraintLayout>
 

@@ -1,6 +1,7 @@
 package com.example.mukesh.myapplication.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -54,8 +55,6 @@ public class EventDetailsPage extends AppCompatActivity {
         super.onResume();
         setContentView(R.layout.activity_show_message);
         progressDialog.show(getSupportFragmentManager(), "Searching events ...");
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
 
         searchform = new Gson().fromJson(getIntent().getStringExtra("searchForm"), SearchForm.class);
@@ -161,6 +160,8 @@ class GetEventResults extends AsyncTask<String, Integer, String> {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            Intent newIntent = new Intent(EventDetailsPage.applicationCtx, EmptyEventResult.class);
+            EventDetailsPage.applicationCtx.startActivity(newIntent);
         }
         return eventDetails;
     }
