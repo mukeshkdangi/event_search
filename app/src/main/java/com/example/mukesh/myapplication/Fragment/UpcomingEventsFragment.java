@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,9 +38,7 @@ import java.util.Objects;
 
 public class UpcomingEventsFragment extends Fragment {
 
-    public GetUpcomingTabDetails getUpcomingTabDetails;
     public View view;
-    FragmentTransaction fragmentTransaction;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +80,7 @@ public class UpcomingEventsFragment extends Fragment {
         categories.add("Artist");
         categories.add("Type");
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_item, categories);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
@@ -93,9 +90,9 @@ public class UpcomingEventsFragment extends Fragment {
         OrderType.add("Ascending");
         OrderType.add("Descending");
 
-        ArrayAdapter<String> OrderTypedataAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, OrderType);
-        OrderTypedataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerOrderType.setAdapter(OrderTypedataAdapter);
+        ArrayAdapter<String> OrderTypeDataAdapter = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_item, OrderType);
+        OrderTypeDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerOrderType.setAdapter(OrderTypeDataAdapter);
 
 
         RecyclerView recyclerView = view.findViewById(R.id.upcomingEventItemList);

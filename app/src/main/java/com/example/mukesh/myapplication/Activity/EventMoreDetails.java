@@ -545,8 +545,8 @@ class GetVenueTabDetails extends AsyncTask<String, Integer, String> {
                 venueTabInfo.setGeneralRule(venueJson.optJSONObject("generalInfo").optString("generalRule"));
                 venueTabInfo.setChildRule(venueJson.optJSONObject("generalInfo").optString("childRule"));
             }
-            venueTabInfo.setLat(venueJson.getJSONObject("location").getString("longitude"));
-            venueTabInfo.setLon(venueJson.getJSONObject("location").getString("latitude"));
+            venueTabInfo.setLon(venueJson.getJSONObject("location").getString("longitude"));
+            venueTabInfo.setLat(venueJson.getJSONObject("location").getString("latitude"));
 
         } catch (JSONException e) {
             e.printStackTrace();

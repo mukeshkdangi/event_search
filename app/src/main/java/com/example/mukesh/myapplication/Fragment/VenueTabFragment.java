@@ -1,30 +1,26 @@
 package com.example.mukesh.myapplication.Fragment;
 
 
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mukesh.myapplication.POJO.EventDetails;
 import com.example.mukesh.myapplication.POJO.VenueTabInfo;
 import com.example.mukesh.myapplication.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
@@ -35,25 +31,20 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class VenueTabFragment extends Fragment {
-    GetVenueTabDetails getVenueTabDetails;
 
-    MapView mapView;
+public class VenueTabFragment extends Fragment implements OnMapReadyCallback {
+
     private GoogleMap googleMap;
-    Location location;
-    private static final LatLng ONE = new LatLng(34.882216, -118.222028);
+    View view;
+    VenueTabInfo eventDetail;
+    private static LatLng ONE = new LatLng(34.882216, -118.222028);
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-      //  mapView.onSaveInstanceState(outState);
+        //  mapView.onSaveInstanceState(outState);
     }
 
     @Override
@@ -68,42 +59,90 @@ public class VenueTabFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        //mapView.onPause();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        if (this.googleMap == null) {
+            this.googleMap = googleMap;
+        }
+        if (Objects.isNull(eventDetail)) return;
+
+        if (Objects.nonNull(eventDetail.getLat()) && Objects.nonNull(eventDetail.getLon()))
+            ONE = new LatLng(Float.parseFloat(eventDetail.getLat()), Float.parseFloat(eventDetail.getLon()));
+        googleMap.addMarker(new MarkerOptions().position(ONE)
+                .title(eventDetail.getVenueName()));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(ONE));
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(ONE);
+        LatLngBounds bounds = builder.build();
+        CameraUpdateFactory.newLatLngBounds(bounds, 25, 25, 5);
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ONE, 14.0f));
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_venue_tab, container, false);
+        view = inflater.inflate(R.layout.fragment_venue_tab, container, false);
         String venueTabInfoStr = getArguments().getString("venueTabInfo");
+
+        eventDetail = new Gson().fromJson(venueTabInfoStr, VenueTabInfo.class);
+
+        if (googleMap == null) {
+            SupportMapFragment mapFrag = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.viewMap));
+            mapFrag.getMapAsync(this);
+        }
+
 
         if (Objects.isNull(venueTabInfoStr)) {
             return view;
         }
-        mapView = view.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                setUpMap(googleMap);
-            }
-        });
 
-        VenueTabInfo eventDetail = new Gson().fromJson(venueTabInfoStr, VenueTabInfo.class);
+
         Log.i("eventDetail", new Gson().toJson(eventDetail));
+        TextView textView = view.findViewById(R.id.name_row_key_value);
+        textView.setText(eventDetail.getVenueName());
+
+        textView = view.findViewById(R.id.address_row_key_value);
+        textView.setText(eventDetail.getAddress());
+
+        textView = view.findViewById(R.id.city_row_key_value);
+        textView.setText(eventDetail.getCity());
+
+        textView = view.findViewById(R.id.ph_row_1_txt_value);
+        textView.setText(eventDetail.getPhoneNumber());
+
+        String text;
+
+
+        WebView webView = view.findViewById(R.id.open_hours_row_1_value);
+        text = "<html><body><p align=\"justify\">";
+        text += eventDetail.getOpenHours();
+        text += "</p></body></html>";
+        webView.setVerticalScrollBarEnabled(false);
+        webView.loadData(text, "text/html", "utf-8");
+
+        webView = view.findViewById(R.id.general_rule_row_value);
+        text = "<html><body><p align=\"justify\">";
+        text += eventDetail.getGeneralRule();
+        text += "</p></body></html>";
+        webView.setVerticalScrollBarEnabled(false);
+        webView.loadData(text, "text/html", "utf-8");
+
+        webView = view.findViewById(R.id.child_rule_row_value);
+        text = "<html><body><p align=\"justify\">";
+        text += eventDetail.getChildRule();
+        text += "</p></body></html>";
+        webView.setVerticalScrollBarEnabled(false);
+        webView.loadData(text, "text/html", "utf-8");
+
 
         return view;
     }
 
     private void setUpMap(GoogleMap map) {
         googleMap = map;
-        List<LatLng> coords = new ArrayList<>();
-        coords.add(ONE);
-        for (int i = 0; i < coords.size(); i++) {
-            googleMap.addMarker(new MarkerOptions()
-                    .position(coords.get(i))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        }
     }
 
 

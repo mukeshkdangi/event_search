@@ -71,8 +71,6 @@ public class ArtistTabFragment extends Fragment {
         applicationCtx = view.getContext();
         List<SpotifyInfo> artistInfo = new Gson().fromJson(artistInfoStr, new TypeToken<List<SpotifyInfo>>() {
         }.getType());
-        List<ArtistImageInfo> artistImages = new Gson().fromJson(artistImagesStr, new TypeToken<List<ArtistImageInfo>>() {
-        }.getType());
 
         recyclerView = view.findViewById(R.id.artistItemList);
         layoutManager = new LinearLayoutManager(applicationCtx);
@@ -94,11 +92,13 @@ public class ArtistTabFragment extends Fragment {
                 artistTabAdaptorPojo.setImages(images);
 
                 String artistName = jsonArray.getJSONObject(idx).optString("artistName");
-
                 artistTabAdaptorPojo.setHeading(artistName);
-                artistTabAdaptorPojo.setFollowers(artistInfo.get(idx).getFollowers());
-                artistTabAdaptorPojo.setPopularity(artistInfo.get(idx).getPopularity());
-                artistTabAdaptorPojo.setCheckAtUrl(artistInfo.get(idx).getSpotifyUrl());
+
+                if (Objects.nonNull(artistInfo) && artistInfo.size() > idx) {
+                    artistTabAdaptorPojo.setFollowers(artistInfo.get(idx).getFollowers());
+                    artistTabAdaptorPojo.setPopularity(artistInfo.get(idx).getPopularity());
+                    artistTabAdaptorPojo.setCheckAtUrl(artistInfo.get(idx).getSpotifyUrl());
+                }
 
                 artistTabAdaptorPojoList.add(artistTabAdaptorPojo);
 

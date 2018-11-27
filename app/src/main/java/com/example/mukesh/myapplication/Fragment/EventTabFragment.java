@@ -42,12 +42,11 @@ import java.util.Objects;
  */
 public class EventTabFragment extends Fragment {
 
-    public GetEventTabDetails getEventTabDetails;
     public static DelayedProgressDialog progressDialog;
     public View view;
     public Context appContext;
     public FragmentManager fragmentTransaction;
-    public EventTabFragment fragm;
+    public EventTabFragment eventTabFragment;
 
     public EventTabFragment() {
     }
@@ -128,7 +127,7 @@ public class EventTabFragment extends Fragment {
 
         fragmentTransaction = getFragmentManager();
         appContext = getActivity().getApplicationContext();
-        fragm = EventTabFragment.this;
+        eventTabFragment = EventTabFragment.this;
 
 
         Log.i("getEventTabDetails", new Gson().toJson(eventTabInfo));

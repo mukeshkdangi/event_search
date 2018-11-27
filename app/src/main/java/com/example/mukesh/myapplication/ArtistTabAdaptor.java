@@ -3,10 +3,14 @@ package com.example.mukesh.myapplication;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -41,7 +45,7 @@ public class ArtistTabAdaptor extends RecyclerView.Adapter<ArtistTabAdaptor.Arti
 
         if (Objects.nonNull(artistTabInfo.getHeading())) {
             viewHolder.heading.setText(artistTabInfo.getHeading());
-            viewHolder.nameRowValue.setText(artistTabInfo.getHeading());
+            viewHolder.nameRowKey.setVisibility(View.GONE);
         } else {
             viewHolder.heading.setVisibility(View.GONE);
             viewHolder.nameRowValue.setVisibility(View.GONE);
@@ -50,18 +54,28 @@ public class ArtistTabAdaptor extends RecyclerView.Adapter<ArtistTabAdaptor.Arti
             viewHolder.follower.setText(artistTabInfo.getFollowers());
         } else {
             viewHolder.follower.setVisibility(View.GONE);
+            viewHolder.followerKey.setVisibility(View.GONE);
         }
 
         if (Objects.nonNull(artistTabInfo.getPopularity())) {
             viewHolder.popularity.setText(artistTabInfo.getPopularity());
         } else {
             viewHolder.popularity.setVisibility(View.GONE);
+            viewHolder.popularityKey.setVisibility(View.GONE);
         }
 
         if (Objects.nonNull(artistTabInfo.getCheckAtUrl())) {
-            viewHolder.checkAt.setText(artistTabInfo.getCheckAtUrl());
+            viewHolder.nameRowValue.setText(artistTabInfo.getHeading());
+            viewHolder.nameRowKey.setVisibility(View.VISIBLE);
+            viewHolder.checkAt.setMovementMethod(LinkMovementMethod.getInstance());
+            String text = "<a href='" + artistTabInfo.getCheckAtUrl() + "'> Spotify </a>";
+            viewHolder.checkAt.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
+            viewHolder.checkAt.setClickable(true);
+            viewHolder.checkAt.setAutoLinkMask(Linkify.WEB_URLS);
+            viewHolder.checkAt.setLinksClickable(true);
         } else {
             viewHolder.checkAt.setVisibility(View.GONE);
+            viewHolder.checkAtKey.setVisibility(View.GONE);
         }
 
 
@@ -120,6 +134,11 @@ public class ArtistTabAdaptor extends RecyclerView.Adapter<ArtistTabAdaptor.Arti
         TextView popularity;
         TextView checkAt;
 
+        TableRow nameRowKey;
+        TableRow followerKey;
+        TableRow popularityKey;
+        TableRow checkAtKey;
+
         ImageView image11;
         ImageView image12;
         ImageView image13;
@@ -150,6 +169,11 @@ public class ArtistTabAdaptor extends RecyclerView.Adapter<ArtistTabAdaptor.Arti
             image17 = itemView.findViewById(R.id.image_1_7);
             image18 = itemView.findViewById(R.id.image_1_8);
             image19 = itemView.findViewById(R.id.image_1_9);
+
+            nameRowKey = itemView.findViewById(R.id.name_row_1);
+            followerKey = itemView.findViewById(R.id.follower_row_1);
+            popularityKey = itemView.findViewById(R.id.popularity_row_1);
+            checkAtKey = itemView.findViewById(R.id.checkat_row_1);
 
         }
 
