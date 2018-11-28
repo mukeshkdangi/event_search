@@ -73,6 +73,7 @@ public class UpcomingEventsFragment extends Fragment {
 
         Spinner spinner = view.findViewById(R.id.order_spinner);
 
+
         List<String> categories = new ArrayList<>();
         categories.add("Default");
         categories.add("Event Name");
@@ -84,7 +85,13 @@ public class UpcomingEventsFragment extends Fragment {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
-        Spinner spinnerOrderType = view.findViewById(R.id.order_type_spinner);
+        final Spinner spinnerOrderType = view.findViewById(R.id.order_type_spinner);
+
+        if (Objects.isNull(upcomingEventInfos) || upcomingEventInfos.size() == 0) {
+            view.findViewById(R.id.no_upcoming_result).setVisibility(View.VISIBLE);
+            spinner.setEnabled(false);
+            spinnerOrderType.setEnabled(false);
+        }
 
         List<String> OrderType = new ArrayList<>();
         OrderType.add("Ascending");
@@ -99,7 +106,6 @@ public class UpcomingEventsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(new UpComingEventTabAdapter(upcomingEventInfos));
 
-        Collections.reverse(upcomingEventInfos);
         spinnerOrderType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view2, int position, long id) {
@@ -115,12 +121,13 @@ public class UpcomingEventsFragment extends Fragment {
             }
         });
 
+        spinnerOrderType.setEnabled(false);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 switch (position) {
-
                     case 1:
+                        spinnerOrderType.setEnabled(true);
                         Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
 
                             public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
@@ -129,6 +136,7 @@ public class UpcomingEventsFragment extends Fragment {
                         });
                         break;
                     case 2:
+                        spinnerOrderType.setEnabled(true);
                         Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
 
                             public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
@@ -138,15 +146,17 @@ public class UpcomingEventsFragment extends Fragment {
                         break;
 
                     case 0:
+                        spinnerOrderType.setEnabled(false);
                         Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
 
                             public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
-                                return o1.getDate().compareTo(o2.getDate());
+                                return o2.getDate().compareTo(o1.getDate());
                             }
                         });
                         break;
 
                     case 4:
+                        spinnerOrderType.setEnabled(true);
                         Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
 
                             public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
@@ -156,6 +166,7 @@ public class UpcomingEventsFragment extends Fragment {
                         break;
 
                     case 3:
+                        spinnerOrderType.setEnabled(true);
                         Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
 
                             public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {

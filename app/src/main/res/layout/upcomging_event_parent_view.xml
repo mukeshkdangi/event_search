@@ -15,8 +15,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1" />
 
         <Spinner
             android:id="@+id/order_type_spinner"
@@ -24,17 +24,31 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1" />
+
+
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <TextView
+
+        android:id="@+id/no_upcoming_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="No Results"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:textSize="15dp"
+
+        />
+
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/upcomingEventItemList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
 
     </android.support.v7.widget.RecyclerView>
 

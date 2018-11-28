@@ -44,6 +44,7 @@ public class DelayedProgressDialog extends DialogFragment {
     private FragmentManager fragmentManager;
     private String tag;
     private Handler showHandler;
+    String message;
 
     // default constructor. Needed so rotation doesn't crash
     public DelayedProgressDialog() {
@@ -65,12 +66,16 @@ public class DelayedProgressDialog extends DialogFragment {
     public void onStart() {
         super.onStart();
         mProgressBar = getDialog().findViewById(R.id.progress);
-
         if (getDialog().getWindow() != null) {
             int px = (int) (PROGRESS_CONTENT_SIZE_DP * getResources().getDisplayMetrics().density);
             getDialog().getWindow().setLayout(px, px);
             getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
+    }
+
+    public void show(FragmentManager fm, String tag, String message) {
+        this.message = message;
+        this.show(fm, tag);
     }
 
     @Override

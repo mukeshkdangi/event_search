@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +41,8 @@ public class EventDetailsPage extends AppCompatActivity {
     public static EventDetailsAdaptor adaptor;
     public static List<EventDetails> eventDetails = new ArrayList<>();
     public static DelayedProgressDialog progressDialog = new DelayedProgressDialog();
+    DialogFragment dialog;
+
     public static Context applicationCtx;
 
     public SearchForm searchform;
@@ -91,6 +95,7 @@ public class EventDetailsPage extends AppCompatActivity {
         if (Objects.isNull(searchform)) {
             return;
         }
+
         progressDialog.show(getSupportFragmentManager(), "Searching events ...");
 
         if (searchform.isOtherLocation()) {

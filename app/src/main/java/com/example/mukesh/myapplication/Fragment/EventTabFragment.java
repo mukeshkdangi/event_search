@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -46,7 +47,7 @@ import java.util.Objects;
  */
 public class EventTabFragment extends Fragment {
 
-    public static DelayedProgressDialog progressDialog;
+    public static DelayedProgressDialog progressDialog = new DelayedProgressDialog();
     public View view;
     public Context appContext;
     public FragmentManager fragmentTransaction;
@@ -75,8 +76,7 @@ public class EventTabFragment extends Fragment {
         EventTabInfo eventTabInfo = new Gson().fromJson(eventTabInfoStr, EventTabInfo.class);
 
         if (Objects.isNull(eventTabInfo)) {
-            progressDialog = new DelayedProgressDialog();
-            progressDialog.show(getFragmentManager(), "");
+            progressDialog.show(getChildFragmentManager(), "In Progress.....");
             return view;
 
         }
@@ -88,7 +88,7 @@ public class EventTabFragment extends Fragment {
 
         List<EventTabDataList> eventTabDataListList = new ArrayList<>();
         EventTabDataList eventTabDataList = new EventTabDataList();
-        eventTabDataList.setKey("Artists/Team");
+        eventTabDataList.setKey("Artist/Team(s)");
         eventTabDataList.setValue(eventTabInfo.getArtistName());
         eventTabDataListList.add(eventTabDataList);
 
@@ -101,13 +101,14 @@ public class EventTabFragment extends Fragment {
         eventTabDataList = new EventTabDataList();
         eventTabDataList.setKey("Time");
         SimpleDateFormat ft = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss", Locale.US);
-
-        try {
-            Date time = ft.parse(eventTabInfo.getTime());
-            ft.applyPattern("MMM dd, yyyy hh:mm:ss");
-            eventTabDataList.setValue(ft.format(time));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (!eventTabInfo.getTime().equalsIgnoreCase("null")) {
+            try {
+                Date time = ft.parse(eventTabInfo.getTime());
+                ft.applyPattern("MMM dd, yyyy hh:mm:ss");
+                eventTabDataList.setValue(ft.format(time));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         eventTabDataListList.add(eventTabDataList);

@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/progress"
-    android:layout_width="80dp"
-    android:layout_height="80dp"
-    android:layout_gravity="center"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/progress"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:max="100"
+        />
+
+    <TextView
+        android:id="@+id/myTextProgressMsg"
+        android:layout_width="500dp"
+        android:gravity="center"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:textSize="15dp"
+        android:textColor="@color/grey"
+        android:text="Loading..." />
+</RelativeLayout>

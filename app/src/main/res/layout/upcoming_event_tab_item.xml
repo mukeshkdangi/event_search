@@ -18,9 +18,8 @@
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:text="textview1"
-            android:autoLink="web"
-            android:textColor="@color/blue"
             android:textAlignment="textStart"
+            android:textColorLink="@color/colorPrimary"
             android:textSize="17sp"
 
             android:textStyle="bold" />

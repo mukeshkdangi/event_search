@@ -158,6 +158,7 @@
                     android:layout_weight="1"
                     android:textAlignment="textStart"
                     android:paddingEnd="5dp"
+                    android:textColor="@color/grey"
                     android:text=""
 
                     />
@@ -186,6 +187,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="@color/grey"
                     android:text=""
 
                     />
@@ -195,6 +197,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+
                 android:orientation="horizontal">
 
                 <TextView
@@ -215,6 +218,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="@color/grey"
                     android:text=""
 
                     />

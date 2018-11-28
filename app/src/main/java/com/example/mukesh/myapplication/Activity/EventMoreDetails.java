@@ -222,7 +222,7 @@ class GetEventTabDetails extends AsyncTask<String, Integer, String> {
             JSONArray attractionsJson = EventDetailsJson.getJSONObject("_embedded").optJSONArray("attractions");
             if (Objects.nonNull(attractionsJson)) {
                 for (int idx = 0; idx < attractionsJson.length(); idx++) {
-                    if (idx > 1) {
+                    if (idx > 0) {
                         stringBuilder.append(" | ");
                     }
                     stringBuilder.append(attractionsJson.getJSONObject(idx).getString("name"));
@@ -512,11 +512,13 @@ class GetUpcomingTabDetails extends AsyncTask<String, Integer, String> {
 
             JSONObject upcomingEventJson = new JSONObject(upComingEvents);
             JSONArray upcomingEventJsonArr = upcomingEventJson.getJSONObject("resultsPage").getJSONObject("results").getJSONArray("event");
+            int minFive = Math.min(upcomingEventJsonArr.length(), 5);
 
-            for (int idx = 0; idx < upcomingEventJsonArr.length(); idx++) {
+            for (int idx = 0; idx < minFive; idx++) {
                 UpcomingEventInfo upcomingEventInfo = new UpcomingEventInfo();
                 String displayName = upcomingEventJsonArr.getJSONObject(idx).optString("displayName");
                 String url = upcomingEventJsonArr.getJSONObject(idx).optString("uri");
+                upcomingEventInfo.setId(Integer.valueOf(upcomingEventJsonArr.getJSONObject(idx).optString("id")));
                 JSONArray performance = upcomingEventJsonArr.getJSONObject(idx).getJSONArray("performance");
                 String artistName = "";
 
@@ -524,9 +526,13 @@ class GetUpcomingTabDetails extends AsyncTask<String, Integer, String> {
                     artistName = performance.getJSONObject(0).optString("displayName");
                 }
                 String date = "";
-                if (upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start") != null)
-                    date = upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start").getString("date") + " " + upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start").getString("time");
-
+                if (upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start") != null) {
+                    date = upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start").getString("date");
+                    String timeStr = upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start").optString("time");
+                    if (Objects.nonNull(timeStr)) {
+                        date = date + " " + timeStr;
+                    }
+                }
                 upcomingEventInfo.setArtistName(artistName);
                 upcomingEventInfo.setDate(date);
                 upcomingEventInfo.setEventName(displayName);

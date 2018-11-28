@@ -92,12 +92,15 @@ public class SearchTabFragment extends Fragment {
         unitSpinner.setAdapter(unitDataAdapter);
 
         view.findViewById(R.id.auto_complete_edit_text).setEnabled(true);
+        view.findViewById(R.id.location_desc).setEnabled(false);
+        view.findViewById(R.id.location_error).setVisibility(View.GONE);
+        view.findViewById(R.id.keyword_error).setVisibility(View.GONE);
 
         view.findViewById(R.id.auto_complete_edit_text).setOnTouchListener(new View.OnTouchListener() {
 
             @Override
-            public boolean onTouch(View v, MotionEvent event) {//TODO for now, update on keyowrd error
-                // view.findViewById(R.id.location_error).setVisibility(View.INVISIBLE);
+            public boolean onTouch(View v, MotionEvent event) {
+                view.findViewById(R.id.keyword_error).setVisibility(View.GONE);
                 return false;
             }
         });
@@ -106,7 +109,7 @@ public class SearchTabFragment extends Fragment {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                //   view.findViewById(R.id.location_error).setVisibility(View.INVISIBLE);
+                view.findViewById(R.id.location_error).setVisibility(View.GONE);
                 return false;
             }
         });
@@ -115,7 +118,7 @@ public class SearchTabFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 view.findViewById(R.id.location_desc).setEnabled(false);
-                //   view.findViewById(R.id.location_error).setVisibility(View.INVISIBLE);
+                view.findViewById(R.id.location_error).setVisibility(View.GONE);
             }
 
         });
@@ -123,7 +126,7 @@ public class SearchTabFragment extends Fragment {
         view.findViewById(R.id.from_other).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              view.findViewById(R.id.location_desc).setEnabled(true);
+                view.findViewById(R.id.location_desc).setEnabled(true);
             }
         });
 
@@ -190,9 +193,15 @@ public class SearchTabFragment extends Fragment {
                 searchEvents(view);
             }
         });
+        view.findViewById(R.id.clear_button).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                clearAllFields(view);
+            }
+        });
 
         return view;
     }
+
 
     private void makeApiCall(String text) {
         ApiCall.make(this.context, text, new Response.Listener<String>() {
@@ -210,7 +219,7 @@ public class SearchTabFragment extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                //IMPORTANT: set data here and notify
+
                 autoSuggestAdapter.setData(stringList);
                 autoSuggestAdapter.notifyDataSetChanged();
             }
@@ -222,6 +231,15 @@ public class SearchTabFragment extends Fragment {
         });
     }
 
+    public void clearAllFields(View view1) {
+        ((TextView) view.findViewById(R.id.auto_complete_edit_text)).setText("");
+        ((TextView) view.findViewById(R.id.distance)).setHint("10");
+        ((Spinner) view.findViewById(R.id.category_spinner)).setSelection(0);
+        ((Spinner) view.findViewById(R.id.unit_spinner)).setSelection(0);
+        ((TextView) view.findViewById(R.id.location_desc)).setText("");
+        view.findViewById(R.id.location_desc).setEnabled(false);
+    }
+
 
     public void searchEvents(View view1) {
         RadioGroup radioGroup;
@@ -230,7 +248,7 @@ public class SearchTabFragment extends Fragment {
         boolean isInValidInput = false;
         String keyword = ((EditText) view.findViewById(R.id.auto_complete_edit_text)).getText().toString();
         if (keyword == null || keyword.length() <= 0 || p.matcher(keyword).find()) {
-            // view.findViewById(R.id.location_error).setVisibility(View.VISIBLE);//TODO keyword error
+            view.findViewById(R.id.keyword_error).setVisibility(View.VISIBLE);
             isInValidInput = true;
         }
 
@@ -238,7 +256,7 @@ public class SearchTabFragment extends Fragment {
         if (view.findViewById(R.id.location_desc).isEnabled()) {
             String locaDec = ((EditText) view.findViewById(R.id.location_desc)).getText().toString();
             if (locaDec == null || locaDec.length() <= 0) {
-                //  view.findViewById(R.id.location_error).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.location_error).setVisibility(View.VISIBLE);
                 isInValidInput = true;
             }
             isLocaDecPresent = true;

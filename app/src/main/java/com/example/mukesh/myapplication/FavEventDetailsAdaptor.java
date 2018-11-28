@@ -19,14 +19,15 @@ import com.example.mukesh.myapplication.Storage.SharedPreferenceConfig;
 import com.google.gson.Gson;
 
 import java.util.List;
+import java.util.Objects;
 
 public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetailsAdaptor.EventDetailsViewHolder>
 
 {
     private List<EventDetails> eventDetailList;
     private Context context;
-    SharedPreferenceConfig sharedPreferenceConfig;
-    View view;
+    public SharedPreferenceConfig sharedPreferenceConfig;
+    public View view;
 
     public FavEventDetailsAdaptor(List<EventDetails> eventDetailList, Context context) {
         this.eventDetailList = eventDetailList;
@@ -38,6 +39,7 @@ public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetails
     @Override
     public EventDetailsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fav_item_layout, viewGroup, false);
+        view.findViewById(R.id.no_fav).setVisibility(View.GONE);
         EventDetailsViewHolder eventDetailsViewHolder = new EventDetailsViewHolder(view, context, eventDetailList, this);
         return eventDetailsViewHolder;
     }
@@ -75,12 +77,6 @@ public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetails
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        view = recyclerView;
-    }
-
-    @Override
     public int getItemViewType(int position) {
         return super.getItemViewType(position);
     }
@@ -88,6 +84,7 @@ public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetails
 
     public void removeItem(int position) {
         eventDetailList.remove(position);
+
         notifyItemRemoved(position);
     }
 
@@ -96,7 +93,7 @@ public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetails
         return eventDetailList.size();
     }
 
-    public static class EventDetailsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class EventDetailsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView eventName;
         TextView eventVenue;
@@ -130,12 +127,13 @@ public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetails
             img.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     addEventToFav(img, view);
+
                 }
             });
 
         }
 
-        private void addEventToFav(ImageView img, View view) {
+        private void addEventToFav(ImageView img, View view2) {
             try {
                 EventDetails eventDetailTmp = new Gson().fromJson(img.getTag().toString(), EventDetails.class);
                 sharedPreferenceConfig = new SharedPreferenceConfig(EventDetailsViewHolder.this.context);
@@ -161,7 +159,11 @@ public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetails
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-
+                if (Objects.nonNull(view) && (Objects.isNull(eventDetailList) || eventDetailList.size() == 0)) {
+                    view.findViewById(R.id.no_fav).setVisibility(View.VISIBLE);
+                } else {
+                    view.findViewById(R.id.no_fav).setVisibility(View.GONE);
+                }
             }
         }
 

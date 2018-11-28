@@ -39,6 +39,16 @@ public class UpcomingEventInfo {
     private String date;
     private String type;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private int id;
+
     public String getUrl() {
         return url;
     }

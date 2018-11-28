@@ -1,6 +1,6 @@
 package com.example.mukesh.myapplication;
 
-import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -41,12 +41,11 @@ public class UpComingEventTabAdapter extends RecyclerView.Adapter<UpComingEventT
 
         String text = "<a href='" + upcomingEventInfos.get(pos).getUrl() + "'> " + upcomingEventInfos.get(pos).getEventName() + " </a>";
 
-        upComingEventTabViewolder.eventName.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
-        upComingEventTabViewolder.eventName.setClickable(true);
-        upComingEventTabViewolder.eventName.setLinksClickable(true);
-        upComingEventTabViewolder.eventName.setAutoLinkMask(Linkify.WEB_URLS);
         upComingEventTabViewolder.eventName.setMovementMethod(LinkMovementMethod.getInstance());
-        upComingEventTabViewolder.eventName.setLinkTextColor(Color.BLUE);
+        upComingEventTabViewolder.eventName.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
+        upComingEventTabViewolder.eventName.setAutoLinkMask(Linkify.ALL);
+        upComingEventTabViewolder.eventName.setPaintFlags(upComingEventTabViewolder.eventName.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+        upComingEventTabViewolder.eventName.setPaintFlags(0);
 
         if (Objects.nonNull(upcomingEventInfos.get(pos).getArtistName())) {
             upComingEventTabViewolder.artistName.setText(upcomingEventInfos.get(pos).getArtistName());
@@ -55,20 +54,28 @@ public class UpComingEventTabAdapter extends RecyclerView.Adapter<UpComingEventT
         }
         if (Objects.nonNull(upcomingEventInfos.get(pos).getDate()) &&
                 !upcomingEventInfos.get(pos).getDate().equalsIgnoreCase("null")) {
-            SimpleDateFormat ft = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss", Locale.US);
+            SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
             try {
                 Date time = ft.parse(upcomingEventInfos.get(pos).getDate());
                 ft.applyPattern("MMM dd, yyyy hh:mm:ss");
                 upComingEventTabViewolder.date.setText(ft.format(time));
             } catch (ParseException e) {
-                upComingEventTabViewolder.date.setVisibility(View.GONE);
+                try {
+                    ft = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date time = ft.parse(upcomingEventInfos.get(pos).getDate());
+                    ft.applyPattern("MMM dd, yyyy");
+                    upComingEventTabViewolder.date.setText(ft.format(time));
+                } catch (Exception e2) {
+                    upComingEventTabViewolder.date.setVisibility(View.GONE);
+                }
             }
         } else {
             upComingEventTabViewolder.date.setVisibility(View.GONE);
         }
         upComingEventTabViewolder.type.setText(upcomingEventInfos.get(pos).getType());
     }
+
 
     @Override
     public int getItemCount() {
