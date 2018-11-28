@@ -35,9 +35,11 @@
             android:parentActivityName=".Activity.MainActivity" />
         <activity
             android:name=".Activity.EventMoreDetails"
-            android:label="Search Result"
             android:parentActivityName=".Activity.EventDetailsPage" />
-        <activity android:name=".Activity.EmptyEventResult"></activity>
+
+        <activity
+            android:name=".Activity.EmptyEventResult"
+            android:parentActivityName=".Activity.MainActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"

@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".Activity.EmptyEventResult">
 
+    <include layout="@layout/toolbar_layout" />
+
     <TextView
         android:id="@+id/empty_result"
         android:layout_width="0dp"

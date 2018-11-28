@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class EventDetailsPage extends AppCompatActivity {
 
@@ -46,19 +47,51 @@ public class EventDetailsPage extends AppCompatActivity {
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventDetailsPage.adaptor = new EventDetailsAdaptor(eventDetails, EventDetailsPage.applicationCtx);
+        EventDetailsPage.recyclerView.setAdapter(EventDetailsPage.adaptor);
+        return;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.onResume();
-        setContentView(R.layout.activity_show_message);
-        progressDialog.show(getSupportFragmentManager(), "Searching events ...");
 
+        setContentView(R.layout.activity_show_message);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Search Results");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         searchform = new Gson().fromJson(getIntent().getStringExtra("searchForm"), SearchForm.class);
         // Instantiate the RequestQueue.
+
+        recyclerView = findViewById(R.id.recyclerview);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        applicationCtx = getApplicationContext();
+
+        if (Objects.isNull(searchform)) {
+            return;
+        }
+        progressDialog.show(getSupportFragmentManager(), "Searching events ...");
 
         if (searchform.isOtherLocation()) {
             GetLatLonFromLocationDesc getLatLonFromLocationDesc = new GetLatLonFromLocationDesc();
@@ -68,12 +101,6 @@ public class EventDetailsPage extends AppCompatActivity {
             getHashCode.execute(new Gson().toJson(searchform));
             geoHashCode = getHashCode.getGeoHashCode();
         }
-
-        recyclerView = findViewById(R.id.recyclerview);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        applicationCtx = getApplicationContext();
     }
 }
 
@@ -138,8 +165,8 @@ class GetEventResults extends AsyncTask<String, Integer, String> {
         eventDetails = processResponse(response);
         EventDetailsPage.eventDetails = eventDetails;
 
-        EventDetailsAdaptor adaptor = new EventDetailsAdaptor(eventDetails, EventDetailsPage.applicationCtx);
-        EventDetailsPage.recyclerView.setAdapter(adaptor);
+        EventDetailsPage.adaptor = new EventDetailsAdaptor(eventDetails, EventDetailsPage.applicationCtx);
+        EventDetailsPage.recyclerView.setAdapter(EventDetailsPage.adaptor);
         EventDetailsPage.progressDialog.cancel();
 
     }
@@ -155,6 +182,7 @@ class GetEventResults extends AsyncTask<String, Integer, String> {
                 eventInfo.setEventDate(eventArray.getJSONObject(idx).getJSONObject("dates").getJSONObject("start").getString("localDate"));
                 eventInfo.setEventVenue(eventArray.getJSONObject(idx).getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name"));
                 eventInfo.setEventId(eventArray.getJSONObject(idx).getString("id"));
+                eventInfo.setUrl(eventArray.getJSONObject(idx).getString("url"));
                 eventInfo.setEventType(eventArray.getJSONObject(idx).getJSONArray("classifications").getJSONObject(0).getJSONObject("segment").getString("name"));
                 eventDetails.add(eventInfo);
             }

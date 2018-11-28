@@ -13,7 +13,11 @@ import android.widget.TextView;
 
 import com.example.mukesh.myapplication.POJO.UpcomingEventInfo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class UpComingEventTabAdapter extends RecyclerView.Adapter<UpComingEventTabAdapter.UpComingEventTabViewolder> {
@@ -49,8 +53,17 @@ public class UpComingEventTabAdapter extends RecyclerView.Adapter<UpComingEventT
         } else {
             upComingEventTabViewolder.artistName.setVisibility(View.GONE);
         }
-        if (Objects.nonNull(upcomingEventInfos.get(pos).getDate())) {
-            upComingEventTabViewolder.date.setText(upcomingEventInfos.get(pos).getDate());
+        if (Objects.nonNull(upcomingEventInfos.get(pos).getDate()) &&
+                !upcomingEventInfos.get(pos).getDate().equalsIgnoreCase("null")) {
+            SimpleDateFormat ft = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss", Locale.US);
+
+            try {
+                Date time = ft.parse(upcomingEventInfos.get(pos).getDate());
+                ft.applyPattern("MMM dd, yyyy hh:mm:ss");
+                upComingEventTabViewolder.date.setText(ft.format(time));
+            } catch (ParseException e) {
+                upComingEventTabViewolder.date.setVisibility(View.GONE);
+            }
         } else {
             upComingEventTabViewolder.date.setVisibility(View.GONE);
         }

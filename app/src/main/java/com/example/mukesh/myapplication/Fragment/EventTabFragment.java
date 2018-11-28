@@ -33,8 +33,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -96,7 +100,16 @@ public class EventTabFragment extends Fragment {
 
         eventTabDataList = new EventTabDataList();
         eventTabDataList.setKey("Time");
-        eventTabDataList.setValue(eventTabInfo.getTime());
+        SimpleDateFormat ft = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss", Locale.US);
+
+        try {
+            Date time = ft.parse(eventTabInfo.getTime());
+            ft.applyPattern("MMM dd, yyyy hh:mm:ss");
+            eventTabDataList.setValue(ft.format(time));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         eventTabDataListList.add(eventTabDataList);
 
 
@@ -105,6 +118,10 @@ public class EventTabFragment extends Fragment {
         eventTabDataList.setValue(eventTabInfo.getCategory());
         eventTabDataListList.add(eventTabDataList);
 
+        eventTabDataList = new EventTabDataList();
+        eventTabDataList.setKey("Ticket Status");
+        eventTabDataList.setValue(eventTabInfo.getTicketStatus());
+        eventTabDataListList.add(eventTabDataList);
 
         eventTabDataList = new EventTabDataList();
         eventTabDataList.setKey("Price Range");

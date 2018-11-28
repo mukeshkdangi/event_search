@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetails
 {
     private List<EventDetails> eventDetailList;
     private Context context;
-    private List<EventDetails> localStorage;
     SharedPreferenceConfig sharedPreferenceConfig;
     View view;
 
@@ -34,7 +32,6 @@ public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetails
         this.eventDetailList = eventDetailList;
         this.context = context;
         sharedPreferenceConfig = new SharedPreferenceConfig(FavEventDetailsAdaptor.this.context);
-        localStorage = sharedPreferenceConfig.loadSharedPreferencesLogList();
     }
 
     @NonNull
@@ -164,10 +161,7 @@ public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetails
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                Log.i("view ", view.getTag().toString());
-                List<EventDetails> content = sharedPreferenceConfig.loadSharedPreferencesLogList();
-                Log.i("Stored Data Size ", String.valueOf(content.size()));
-                Log.i("Stored Data", new Gson().toJson(content));
+
             }
         }
 

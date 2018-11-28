@@ -81,6 +81,11 @@ public class EventDetailsAdaptor extends RecyclerView.Adapter<EventDetailsAdapto
         return false;
     }
 
+    public void setUpdateChange(List<EventDetails> eventDetails) {
+        eventDetailList = eventDetails;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return eventDetailList.size();
@@ -133,35 +138,52 @@ public class EventDetailsAdaptor extends RecyclerView.Adapter<EventDetailsAdapto
 
                 if (eventDetailTmp.isFav()) {
                     eventDetailTmp.setFav(false);
+                    updateEventDetailsListWithFav(true, eventDetailTmp.getEventId());
+
                     img.setImageResource(R.drawable.heart_outline_black);
                     sharedPreferenceConfig.removeFromSharedPref(new Gson().toJson(eventDetailTmp));
+
                     Toast toast = Toast.makeText(this.context, eventDetailTmp.getEventName() + "was removed to favorites",
                             Toast.LENGTH_LONG);
+
                     TextView text = toast.getView().findViewById(android.R.id.message);
                     text.setBackgroundResource(R.drawable.dialog_bg);
                     toast.show();
                     img.setTag(new Gson().toJson(eventDetailTmp));
+
                     return;
                 }
 
 
                 img.setImageResource(R.drawable.heart_fill_red);
                 eventDetailTmp.setFav(true);
+                updateEventDetailsListWithFav(true, eventDetailTmp.getEventId());
 
                 sharedPreferenceConfig.saveSharedPreferencesLogList(new Gson().toJson(eventDetailTmp));
                 Toast toast = Toast.makeText(this.context, eventDetailTmp.getEventName() + "was added to favorites",
                         Toast.LENGTH_LONG);
                 TextView text = toast.getView().findViewById(android.R.id.message);
+
                 text.setBackgroundColor(PorterDuff.Mode.SRC.ordinal());
                 toast.show();
                 img.setTag(new Gson().toJson(eventDetailTmp));
+
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                Log.i("view ", view.getTag().toString());
-                List<EventDetails> content = sharedPreferenceConfig.loadSharedPreferencesLogList();
-                Log.i("Stored Data Size ", String.valueOf(content.size()));
-                Log.i("Stored Data", new Gson().toJson(content));
+            }
+        }
+
+        public void updateEventDetailsListWithFav(boolean isNewFav, String favEventId) {
+            for (int idx = 0; idx < eventDetails.size(); idx++) {
+                if (eventDetails.get(idx).getEventId().equals(favEventId)) {
+                    if (isNewFav) {
+                        eventDetails.get(idx).setFav(true);
+                    } else {
+                        eventDetails.get(idx).setFav(false);
+                    }
+                    break;
+                }
             }
         }
 

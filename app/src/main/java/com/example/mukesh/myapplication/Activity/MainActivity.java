@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Event Search");
         setSupportActionBar(toolbar);
 
         tabLayout = findViewById(R.id.tabLayout);
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if(tab.getPosition()==1){
+                if (tab.getPosition() == 1) {
 
                 }
             }

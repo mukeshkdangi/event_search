@@ -1,5 +1,8 @@
 package com.example.mukesh.myapplication.Activity;
 
+import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -8,6 +11,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mukesh.myapplication.Fragment.ArtistTabFragment;
 import com.example.mukesh.myapplication.Fragment.EventTabFragment;
@@ -20,6 +27,7 @@ import com.example.mukesh.myapplication.POJO.SpotifyInfo;
 import com.example.mukesh.myapplication.POJO.UpcomingEventInfo;
 import com.example.mukesh.myapplication.POJO.VenueTabInfo;
 import com.example.mukesh.myapplication.R;
+import com.example.mukesh.myapplication.Storage.SharedPreferenceConfig;
 import com.example.mukesh.myapplication.ViewPagerAdapter;
 import com.google.gson.Gson;
 
@@ -43,14 +51,53 @@ public class EventMoreDetails extends AppCompatActivity {
     static ViewPagerAdapter viewPagerAdapter;
     static FragmentManager fragMaanger;
     static Bundle bundle = new Bundle();
+    SharedPreferenceConfig sharedPreferenceConfig;
+    EventDetails eventDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_more_details);
 
-        toolbar = findViewById(R.id.toolbar);
+        sharedPreferenceConfig = new SharedPreferenceConfig(this);
+
+        eventDetails = new Gson().fromJson(getIntent().getStringExtra("eventDetails"), EventDetails.class);
+
+        toolbar = findViewById(R.id.event_tab_toolbar);
+        toolbar.setTitle(eventDetails.getEventName());
+
+        final ImageView favIcon = findViewById(R.id.favicon2);
+        favIcon.setImageResource(eventDetails.isFav() ? R.drawable.heart_fill_red : R.drawable.heart_outline_white);
+        ImageView twitter = findViewById(R.id.twitter);
+        twitter.setImageResource(R.drawable.twitter_ic);
+
+        favIcon.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                addEventToFav(favIcon, view);
+            }
+        });
+
+        twitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StringBuilder twit = new StringBuilder();
+                twit.append("Check out ").append(eventDetails.getEventName());
+                twit.append(" located at ").append(eventDetails.getEventVenue());
+                twit.append(" website : ").append(eventDetails.getUrl());
+
+                Intent sharingIntent = new Intent(Intent.ACTION_VIEW);
+                String url = "http://www.twitter.com/intent/tweet?text=" + twit.toString();
+
+                sharingIntent.setData(Uri.parse(url));
+                Intent chooserIntent = Intent.createChooser(sharingIntent, "Open in...");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{sharingIntent});
+                startActivity(chooserIntent);
+            }
+        });
+
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
@@ -71,6 +118,39 @@ public class EventMoreDetails extends AppCompatActivity {
         new GetVenueTabDetails().execute(getIntent().getStringExtra("eventDetails"));
         new GetUpcomingTabDetails().execute(getIntent().getStringExtra("eventDetails"));
 
+    }
+
+    private void addEventToFav(ImageView img, View view) {
+        try {
+
+            if (eventDetails.isFav()) {
+                eventDetails.setFav(false);
+                img.setImageResource(R.drawable.heart_outline_black);
+                sharedPreferenceConfig.removeFromSharedPref(new Gson().toJson(eventDetails));
+                Toast toast = Toast.makeText(this, eventDetails.getEventName() + "was removed to favorites",
+                        Toast.LENGTH_LONG);
+                TextView text = toast.getView().findViewById(android.R.id.message);
+                text.setBackgroundResource(R.drawable.dialog_bg);
+                toast.show();
+                img.setTag(new Gson().toJson(eventDetails));
+                return;
+            }
+
+
+            img.setImageResource(R.drawable.heart_fill_red);
+            eventDetails.setFav(true);
+
+            sharedPreferenceConfig.saveSharedPreferencesLogList(new Gson().toJson(eventDetails));
+            Toast toast = Toast.makeText(this, eventDetails.getEventName() + "was added to favorites",
+                    Toast.LENGTH_LONG);
+            TextView text = toast.getView().findViewById(android.R.id.message);
+            text.setBackgroundColor(PorterDuff.Mode.SRC.ordinal());
+            toast.show();
+            img.setTag(new Gson().toJson(eventDetails));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        }
     }
 
     private int[] tabIcons = {
@@ -443,8 +523,10 @@ class GetUpcomingTabDetails extends AsyncTask<String, Integer, String> {
                 if (performance.length() > 0) {
                     artistName = performance.getJSONObject(0).optString("displayName");
                 }
+                String date = "";
+                if (upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start") != null)
+                    date = upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start").getString("date") + " " + upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start").getString("time");
 
-                String date = upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start").getString("datetime");
                 upcomingEventInfo.setArtistName(artistName);
                 upcomingEventInfo.setDate(date);
                 upcomingEventInfo.setEventName(displayName);
