@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TableRow;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -67,11 +67,12 @@ public class ArtistTabAdaptor extends RecyclerView.Adapter<ArtistTabAdaptor.Arti
         if (Objects.nonNull(artistTabInfo.getCheckAtUrl())) {
             viewHolder.nameRowValue.setText(artistTabInfo.getHeading());
             viewHolder.nameRowKey.setVisibility(View.VISIBLE);
+
             viewHolder.checkAt.setMovementMethod(LinkMovementMethod.getInstance());
-            String text = "<a href='" + artistTabInfo.getCheckAtUrl() + "'> Spotify </a>";
+            String text = "<a style='cursor:pointer;' href='" + artistTabInfo.getCheckAtUrl() + "'> Spotify </a>";
             viewHolder.checkAt.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
             viewHolder.checkAt.setClickable(true);
-            viewHolder.checkAt.setAutoLinkMask(Linkify.WEB_URLS);
+            viewHolder.checkAt.setAutoLinkMask(Linkify.ALL);
             viewHolder.checkAt.setLinksClickable(true);
         } else {
             viewHolder.checkAt.setVisibility(View.GONE);
@@ -112,10 +113,8 @@ public class ArtistTabAdaptor extends RecyclerView.Adapter<ArtistTabAdaptor.Arti
             Glide.with(viewHolder.context).load(artistTabInfo.getImages().get(7)).into(viewHolder.image18);
         else
             viewHolder.image18.setVisibility(View.GONE);
-        if (artistTabInfo.getImages().size() > 8)
-            Glide.with(viewHolder.context).load(artistTabInfo.getImages().get(8)).into(viewHolder.image19);
-        else
-            viewHolder.image19.setVisibility(View.GONE);
+
+        viewHolder.image19.setVisibility(View.GONE);
 
     }
 
@@ -134,10 +133,10 @@ public class ArtistTabAdaptor extends RecyclerView.Adapter<ArtistTabAdaptor.Arti
         TextView popularity;
         TextView checkAt;
 
-        TableRow nameRowKey;
-        TableRow followerKey;
-        TableRow popularityKey;
-        TableRow checkAtKey;
+        LinearLayout nameRowKey;
+        LinearLayout followerKey;
+        LinearLayout popularityKey;
+        LinearLayout checkAtKey;
 
         ImageView image11;
         ImageView image12;
@@ -170,10 +169,10 @@ public class ArtistTabAdaptor extends RecyclerView.Adapter<ArtistTabAdaptor.Arti
             image18 = itemView.findViewById(R.id.image_1_8);
             image19 = itemView.findViewById(R.id.image_1_9);
 
-            nameRowKey = itemView.findViewById(R.id.name_row_1);
-            followerKey = itemView.findViewById(R.id.follower_row_1);
-            popularityKey = itemView.findViewById(R.id.popularity_row_1);
-            checkAtKey = itemView.findViewById(R.id.checkat_row_1);
+            nameRowKey = itemView.findViewById(R.id.nameKey);
+            followerKey = itemView.findViewById(R.id.followerKey);
+            popularityKey = itemView.findViewById(R.id.popularityKey);
+            checkAtKey = itemView.findViewById(R.id.checkAtKey);
 
         }
 

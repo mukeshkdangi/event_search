@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.mukesh.myapplication.DelayedProgressDialog;
@@ -52,6 +54,10 @@ public class EventTabFragment extends Fragment {
     public Context appContext;
     public FragmentManager fragmentTransaction;
     public EventTabFragment eventTabFragment;
+    AlphaAnimation inAnimation;
+    AlphaAnimation outAnimation;
+
+    FrameLayout progressBarHolder;
 
     public EventTabFragment() {
     }
@@ -72,17 +78,23 @@ public class EventTabFragment extends Fragment {
         // Inflate the layout for this fragment
         String eventTabInfoStr = getArguments().getString("eventTabInfo");
         Log.i("eventDetail", new Gson().toJson(eventTabInfoStr));
+        view = inflater.inflate(R.layout.fragment_event_tab, container, false);
+        progressBarHolder =  view.findViewById(R.id.progressBarHolder);
+        progressBarHolder.dispatchDisplayHint(View.VISIBLE);
 
         EventTabInfo eventTabInfo = new Gson().fromJson(eventTabInfoStr, EventTabInfo.class);
 
         if (Objects.isNull(eventTabInfo)) {
-            progressDialog.show(getChildFragmentManager(), "In Progress.....");
+           // progressDialog.show(getChildFragmentManager(), "In Progress.....");
+            progressBarHolder.setAnimation(inAnimation);
+            progressBarHolder.setVisibility(View.VISIBLE);
             return view;
 
         }
-        progressDialog.cancel();
+       // progressDialog.cancel();
+        progressBarHolder.setAnimation(outAnimation);
+        progressBarHolder.setVisibility(View.GONE);
 
-        view = inflater.inflate(R.layout.fragment_event_tab, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.eventItemList);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 

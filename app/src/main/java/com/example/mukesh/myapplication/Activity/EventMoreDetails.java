@@ -125,7 +125,7 @@ public class EventMoreDetails extends AppCompatActivity {
 
             if (eventDetails.isFav()) {
                 eventDetails.setFav(false);
-                img.setImageResource(R.drawable.heart_outline_black);
+                img.setImageResource(R.drawable.heart_outline_white);
                 sharedPreferenceConfig.removeFromSharedPref(new Gson().toJson(eventDetails));
                 Toast toast = Toast.makeText(this, eventDetails.getEventName() + "was removed to favorites",
                         Toast.LENGTH_LONG);
@@ -141,7 +141,7 @@ public class EventMoreDetails extends AppCompatActivity {
             eventDetails.setFav(true);
 
             sharedPreferenceConfig.saveSharedPreferencesLogList(new Gson().toJson(eventDetails));
-            Toast toast = Toast.makeText(this, eventDetails.getEventName() + "was added to favorites",
+            Toast toast = Toast.makeText(this, eventDetails.getEventName() + "was added from favorites",
                     Toast.LENGTH_LONG);
             TextView text = toast.getView().findViewById(android.R.id.message);
             text.setBackgroundColor(PorterDuff.Mode.SRC.ordinal());
@@ -543,7 +543,11 @@ class GetUpcomingTabDetails extends AsyncTask<String, Integer, String> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Log.i("upcomingEventInfos size", String.valueOf(upcomingEventInfos.size()));
         EventMoreDetails.bundle.putString("upcomingEventInfos", new Gson().toJson(upcomingEventInfos));
 

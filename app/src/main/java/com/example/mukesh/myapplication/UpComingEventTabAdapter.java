@@ -44,8 +44,9 @@ public class UpComingEventTabAdapter extends RecyclerView.Adapter<UpComingEventT
         upComingEventTabViewolder.eventName.setMovementMethod(LinkMovementMethod.getInstance());
         upComingEventTabViewolder.eventName.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
         upComingEventTabViewolder.eventName.setAutoLinkMask(Linkify.ALL);
-        upComingEventTabViewolder.eventName.setPaintFlags(upComingEventTabViewolder.eventName.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-        upComingEventTabViewolder.eventName.setPaintFlags(0);
+        upComingEventTabViewolder.eventName.setClickable(true);
+        upComingEventTabViewolder.eventName.setLinksClickable(true);
+
 
         if (Objects.nonNull(upcomingEventInfos.get(pos).getArtistName())) {
             upComingEventTabViewolder.artistName.setText(upcomingEventInfos.get(pos).getArtistName());

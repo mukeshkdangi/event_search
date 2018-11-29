@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mukesh.myapplication.ArtistTabAdaptor;
-import com.example.mukesh.myapplication.POJO.ArtistImageInfo;
 import com.example.mukesh.myapplication.POJO.ArtistTabAdaptorPojo;
 import com.example.mukesh.myapplication.POJO.EventDetails;
 import com.example.mukesh.myapplication.POJO.SpotifyInfo;
@@ -76,7 +75,7 @@ public class ArtistTabFragment extends Fragment {
         layoutManager = new LinearLayoutManager(applicationCtx);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-
+        artistTabAdaptorPojoList = new ArrayList<>();
 
         try {
 

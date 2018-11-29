@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.widget.FrameLayout;
 
 import com.example.mukesh.myapplication.DelayedProgressDialog;
 import com.example.mukesh.myapplication.EventDetailsAdaptor;
@@ -40,13 +42,14 @@ public class EventDetailsPage extends AppCompatActivity {
     public static RecyclerView.LayoutManager layoutManager;
     public static EventDetailsAdaptor adaptor;
     public static List<EventDetails> eventDetails = new ArrayList<>();
-    public static DelayedProgressDialog progressDialog = new DelayedProgressDialog();
-    DialogFragment dialog;
-
     public static Context applicationCtx;
 
     public SearchForm searchform;
     public String geoHashCode;
+    AlphaAnimation inAnimation;
+    static AlphaAnimation outAnimation;
+
+    static FrameLayout progressBarHolder;
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -96,7 +99,10 @@ public class EventDetailsPage extends AppCompatActivity {
             return;
         }
 
-        progressDialog.show(getSupportFragmentManager(), "Searching events ...");
+        progressBarHolder = findViewById(R.id.progressBarHolder2);
+        progressBarHolder.dispatchDisplayHint(View.VISIBLE);
+        progressBarHolder.setAnimation(inAnimation);
+        progressBarHolder.setVisibility(View.VISIBLE);
 
         if (searchform.isOtherLocation()) {
             GetLatLonFromLocationDesc getLatLonFromLocationDesc = new GetLatLonFromLocationDesc();
@@ -172,7 +178,9 @@ class GetEventResults extends AsyncTask<String, Integer, String> {
 
         EventDetailsPage.adaptor = new EventDetailsAdaptor(eventDetails, EventDetailsPage.applicationCtx);
         EventDetailsPage.recyclerView.setAdapter(EventDetailsPage.adaptor);
-        EventDetailsPage.progressDialog.cancel();
+        //EventDetailsPage.progressDialog.cancel();
+        EventDetailsPage.progressBarHolder.setAnimation(EventDetailsPage.outAnimation);
+        EventDetailsPage.progressBarHolder.setVisibility(View.GONE);
 
     }
 
@@ -285,7 +293,7 @@ class GetLatLonFromLocationDesc extends AsyncTask<String, Integer, SearchForm> {
         StringBuffer locationURL = new StringBuffer();
         locationURL.append("http://100.26.198.168:3000/api/google/getlatlonbydescription/");
 
-
+        Log.i("locationURL ", locationURL.toString());
         try {
             locationURL.append(URLEncoder.encode(searchForm.getLocationDescription(), "UTF-8"));
             URL url = new URL(locationURL.toString());

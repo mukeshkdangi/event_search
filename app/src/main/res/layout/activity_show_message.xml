@@ -9,6 +9,40 @@
     android:layout_height="match_parent"
     tools:context=".Activity.EventDetailsPage">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/progressBarHolder2"
+            android:animateLayoutChanges="true"
+            android:alpha="0.3"
+            android:background="@color/grey"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:tooltipText="Searching Events...."
+
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/myTextProgressMsg2"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:textSize="15dp"
+                android:textColor="@color/orange"
+                android:text="Loading..." />
+
+        </FrameLayout>
+    </RelativeLayout>
+
+
     <include layout="@layout/toolbar_layout" />
 
 
@@ -22,6 +56,7 @@
         android:scrollbars="vertical">
 
     </android.support.v7.widget.RecyclerView>
+
 
 
 </RelativeLayout>

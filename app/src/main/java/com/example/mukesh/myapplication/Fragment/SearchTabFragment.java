@@ -238,6 +238,8 @@ public class SearchTabFragment extends Fragment {
         ((Spinner) view.findViewById(R.id.unit_spinner)).setSelection(0);
         ((TextView) view.findViewById(R.id.location_desc)).setText("");
         view.findViewById(R.id.location_desc).setEnabled(false);
+        view.findViewById(R.id.location_error).setVisibility(View.GONE);
+        view.findViewById(R.id.keyword_error).setVisibility(View.GONE);
     }
 
 

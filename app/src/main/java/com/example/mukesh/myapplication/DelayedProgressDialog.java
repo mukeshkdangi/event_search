@@ -3,8 +3,10 @@ package com.example.mukesh.myapplication;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;

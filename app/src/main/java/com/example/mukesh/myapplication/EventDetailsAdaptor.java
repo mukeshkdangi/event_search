@@ -143,7 +143,7 @@ public class EventDetailsAdaptor extends RecyclerView.Adapter<EventDetailsAdapto
                     img.setImageResource(R.drawable.heart_outline_black);
                     sharedPreferenceConfig.removeFromSharedPref(new Gson().toJson(eventDetailTmp));
 
-                    Toast toast = Toast.makeText(this.context, eventDetailTmp.getEventName() + "was removed to favorites",
+                    Toast toast = Toast.makeText(this.context, eventDetailTmp.getEventName() + "was removed from favorites",
                             Toast.LENGTH_LONG);
 
                     TextView text = toast.getView().findViewById(android.R.id.message);
