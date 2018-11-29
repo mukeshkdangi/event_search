@@ -4,6 +4,16 @@ public class EventTabDataList {
     String key;
     String value;
 
+    public boolean isSeatMapURL() {
+        return isSeatMapURL;
+    }
+
+    public void setSeatMapURL(boolean seatMapURL) {
+        isSeatMapURL = seatMapURL;
+    }
+
+    boolean isSeatMapURL;
+
     public String getKey() {
         return key;
     }

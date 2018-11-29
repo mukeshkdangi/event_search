@@ -114,17 +114,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"></ImageView>
 
-    <TextView
-
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:text="No Favorites"
-        android:textSize="30dp"
-        android:id="@+id/no_fav"
-
-        />
 
 </android.support.constraint.ConstraintLayout>
 

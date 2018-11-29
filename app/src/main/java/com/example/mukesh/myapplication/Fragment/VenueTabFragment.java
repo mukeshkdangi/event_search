@@ -137,6 +137,23 @@ public class VenueTabFragment extends Fragment implements OnMapReadyCallback {
         webView.setVerticalScrollBarEnabled(false);
         webView.loadData(text, "text/html", "utf-8");
 
+        if (Objects.isNull(eventDetail.getOpenHours()) || eventDetail.getOpenHours().equalsIgnoreCase("")) {
+            view.findViewById(R.id.open_hours_row_1_value).setVisibility(View.GONE);
+            view.findViewById(R.id.open_hours_row_1_txt).setVisibility(View.GONE);
+        }
+        if (Objects.isNull(eventDetail.getGeneralRule()) || eventDetail.getGeneralRule().equalsIgnoreCase("")) {
+            view.findViewById(R.id.general_rule_row_txt).setVisibility(View.GONE);
+            view.findViewById(R.id.general_rule_row_value).setVisibility(View.GONE);
+        }
+        if (Objects.isNull(eventDetail.getChildRule()) || eventDetail.getChildRule().equalsIgnoreCase("")) {
+            view.findViewById(R.id.child_rule_row_txt).setVisibility(View.GONE);
+            view.findViewById(R.id.child_rule_row_value).setVisibility(View.GONE);
+        }
+        if (Objects.isNull(eventDetail.getPhoneNumber()) || eventDetail.getChildRule().equalsIgnoreCase("")) {
+            view.findViewById(R.id.ph_row_1_txt_value).setVisibility(View.GONE);
+            view.findViewById(R.id.ph_row_1_txt_key).setVisibility(View.GONE);
+        }
+
 
         return view;
     }

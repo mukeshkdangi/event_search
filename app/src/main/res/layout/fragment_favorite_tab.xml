@@ -16,7 +16,7 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="No Favorites"
-        android:textSize="30dp"
+        android:textSize="20dp"
         android:visibility="gone"
         android:id="@+id/no_fav"
 

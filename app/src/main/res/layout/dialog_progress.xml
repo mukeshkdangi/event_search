@@ -12,6 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center"
+        android:outlineAmbientShadowColor="@color/orange"
         android:max="100"
         />
 

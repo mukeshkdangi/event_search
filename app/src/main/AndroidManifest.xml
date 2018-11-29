@@ -37,10 +37,6 @@
             android:name=".Activity.EventMoreDetails"
             android:parentActivityName=".Activity.EventDetailsPage" />
 
-        <activity
-            android:name=".Activity.EmptyEventResult"
-            android:parentActivityName=".Activity.MainActivity" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

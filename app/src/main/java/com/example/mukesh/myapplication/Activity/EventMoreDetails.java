@@ -115,7 +115,7 @@ public class EventMoreDetails extends AppCompatActivity {
 
         new GetEventTabDetails().execute(getIntent().getStringExtra("eventDetails"));
         new GetArtistTabDetails().execute(getIntent().getStringExtra("eventDetails"));
-        new GetVenueTabDetails().execute(getIntent().getStringExtra("eventDetails"));
+       // new GetVenueTabDetails().execute(getIntent().getStringExtra("eventDetails"));
         new GetUpcomingTabDetails().execute(getIntent().getStringExtra("eventDetails"));
 
     }
@@ -248,17 +248,25 @@ class GetEventTabDetails extends AsyncTask<String, Integer, String> {
                 eventTabInfo.setPriceRange("$" + minPrice + " ~ $" + maxPrice);
             }
             // Building Venue Object
-            venueTabInfo.setVenueName(eventTabInfo.getVenueName());
-            venueTabInfo.setAddress(venueJson.getJSONObject("address").getString("line1"));
-            venueTabInfo.setCity(venueJson.getJSONObject("city").getString("name") + " " + venueJson.getJSONObject("state").getString("name"));
+            try {
+                // Building Venue Object
+                venueTabInfo.setVenueName(venueJson.getString("name"));
+                venueTabInfo.setAddress(venueJson.getJSONObject("address").getString("line1"));
+                venueTabInfo.setCity(venueJson.getJSONObject("city").getString("name") + " " + venueJson.getJSONObject("state").getString("name"));
 
-            if (venueJson.optJSONObject("boxOfficeInfo") != null) {
-                venueTabInfo.setPhoneNumber(venueJson.optJSONObject("boxOfficeInfo").optString("phoneNumberDetail"));
-                venueTabInfo.setOpenHours(venueJson.optJSONObject("boxOfficeInfo").optString("openHoursDetail"));
-            }
-            if (venueJson.optJSONObject("generalInfo") != null) {
-                venueTabInfo.setGeneralRule(venueJson.optJSONObject("generalInfo").optString("generalRule"));
-                venueTabInfo.setChildRule(venueJson.optJSONObject("generalInfo").optString("childRule"));
+                if (venueJson.optJSONObject("boxOfficeInfo") != null) {
+                    venueTabInfo.setPhoneNumber(venueJson.optJSONObject("boxOfficeInfo").optString("phoneNumberDetail"));
+                    venueTabInfo.setOpenHours(venueJson.optJSONObject("boxOfficeInfo").optString("openHoursDetail"));
+                }
+                if (venueJson.optJSONObject("generalInfo") != null) {
+                    venueTabInfo.setGeneralRule(venueJson.optJSONObject("generalInfo").optString("generalRule"));
+                    venueTabInfo.setChildRule(venueJson.optJSONObject("generalInfo").optString("childRule"));
+                }
+                venueTabInfo.setLon(venueJson.getJSONObject("location").getString("longitude"));
+                venueTabInfo.setLat(venueJson.getJSONObject("location").getString("latitude"));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
         } catch (JSONException e) {
@@ -268,6 +276,7 @@ class GetEventTabDetails extends AsyncTask<String, Integer, String> {
 
         EventMoreDetails.bundle.putString("eventDetails", new Gson().toJson(eventDetail));
         EventMoreDetails.bundle.putString("eventTabInfo", new Gson().toJson(eventTabInfo));
+        EventMoreDetails.bundle.putString("venueTabInfo", new Gson().toJson(venueTabInfo));
 
     }
 
@@ -294,8 +303,8 @@ class GetArtistTabDetails extends AsyncTask<String, Integer, String> {
             URL url = new URL(urlBuilder.toString());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setConnectTimeout(6000);
-            connection.setReadTimeout(6000);
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(10000);
             connection.connect();
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
@@ -313,6 +322,7 @@ class GetArtistTabDetails extends AsyncTask<String, Integer, String> {
 
         {
             try {
+                Log.i("eventTabResultBuilder.toString()", eventTabResultBuilder.toString());
                 JSONObject EventDetailsJson = new JSONObject(eventTabResultBuilder.toString());
                 String eventName = EventDetailsJson.getString("name");
                 List<String> attractionList = new ArrayList<>();
@@ -529,7 +539,7 @@ class GetUpcomingTabDetails extends AsyncTask<String, Integer, String> {
                 if (upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start") != null) {
                     date = upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start").getString("date");
                     String timeStr = upcomingEventJsonArr.getJSONObject(idx).getJSONObject("start").optString("time");
-                    if (Objects.nonNull(timeStr)) {
+                    if (Objects.nonNull(timeStr) && !timeStr.equalsIgnoreCase("null")) {
                         date = date + " " + timeStr;
                     }
                 }
@@ -617,11 +627,9 @@ class GetVenueTabDetails extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onPostExecute(String eventTabResults) {
-        Log.i("", eventTabResults);
         venueTabInfo = new VenueTabInfo();
         try {
             JSONObject EventDetailsJson = new JSONObject(eventTabResults);
-
             JSONObject venueJson = EventDetailsJson.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0);
 
             // Building Venue Object

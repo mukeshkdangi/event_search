@@ -14,20 +14,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mukesh.myapplication.Activity.EventMoreDetails;
+import com.example.mukesh.myapplication.Fragment.FavoriteTabFragment;
 import com.example.mukesh.myapplication.POJO.EventDetails;
 import com.example.mukesh.myapplication.Storage.SharedPreferenceConfig;
 import com.google.gson.Gson;
 
 import java.util.List;
-import java.util.Objects;
+
 
 public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetailsAdaptor.EventDetailsViewHolder>
+
 
 {
     private List<EventDetails> eventDetailList;
     private Context context;
     public SharedPreferenceConfig sharedPreferenceConfig;
     public View view;
+    public ViewGroup viewGroup;
 
     public FavEventDetailsAdaptor(List<EventDetails> eventDetailList, Context context) {
         this.eventDetailList = eventDetailList;
@@ -38,8 +41,8 @@ public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetails
     @NonNull
     @Override
     public EventDetailsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        this.viewGroup = viewGroup;
         view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fav_item_layout, viewGroup, false);
-        view.findViewById(R.id.no_fav).setVisibility(View.GONE);
         EventDetailsViewHolder eventDetailsViewHolder = new EventDetailsViewHolder(view, context, eventDetailList, this);
         return eventDetailsViewHolder;
     }
@@ -84,7 +87,9 @@ public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetails
 
     public void removeItem(int position) {
         eventDetailList.remove(position);
-
+        if (eventDetailList.size() == 0) {
+            FavoriteTabFragment.showNoFavMessage();
+        }
         notifyItemRemoved(position);
     }
 
@@ -159,11 +164,6 @@ public class FavEventDetailsAdaptor extends RecyclerView.Adapter<FavEventDetails
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (Objects.nonNull(view) && (Objects.isNull(eventDetailList) || eventDetailList.size() == 0)) {
-                    view.findViewById(R.id.no_fav).setVisibility(View.VISIBLE);
-                } else {
-                    view.findViewById(R.id.no_fav).setVisibility(View.GONE);
-                }
             }
         }
 

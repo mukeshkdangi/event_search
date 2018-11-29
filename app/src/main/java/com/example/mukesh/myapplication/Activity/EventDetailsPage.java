@@ -44,14 +44,24 @@ public class EventDetailsPage extends AppCompatActivity {
 
     public SearchForm searchform;
     public String geoHashCode;
-    AlphaAnimation inAnimation;
+    public AlphaAnimation inAnimation;
     static AlphaAnimation outAnimation;
 
     static FrameLayout progressBarHolder;
+    static View noRecordView;
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    public static void initList() {
+        eventDetails = new ArrayList<>();
     }
 
     @Override
@@ -88,8 +98,8 @@ public class EventDetailsPage extends AppCompatActivity {
         // Instantiate the RequestQueue.
 
         recyclerView = findViewById(R.id.recyclerview);
+        noRecordView = findViewById(R.id.no_record_found);
         layoutManager = new LinearLayoutManager(this);
-        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         applicationCtx = getApplicationContext();
 
@@ -198,8 +208,7 @@ class GetEventResults extends AsyncTask<String, Integer, String> {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Intent newIntent = new Intent(EventDetailsPage.applicationCtx, EmptyEventResult.class);
-            EventDetailsPage.applicationCtx.startActivity(newIntent);
+            EventDetailsPage.noRecordView.setVisibility(View.VISIBLE);
         }
         return eventDetails;
     }

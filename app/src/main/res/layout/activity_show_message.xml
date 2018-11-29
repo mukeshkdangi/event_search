@@ -12,6 +12,21 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="No Record"
+            android:textSize="20dp"
+            android:visibility="gone"
+            android:id="@+id/no_record_found"
+
+            />
+
+
         <FrameLayout
             android:id="@+id/progressBarHolder2"
             android:animateLayoutChanges="true"

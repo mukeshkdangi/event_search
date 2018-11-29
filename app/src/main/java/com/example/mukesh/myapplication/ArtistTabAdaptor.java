@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mukesh.myapplication.POJO.ArtistTabAdaptorPojo;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Objects;
@@ -81,7 +82,8 @@ public class ArtistTabAdaptor extends RecyclerView.Adapter<ArtistTabAdaptor.Arti
 
 
         if (artistTabInfo.getImages().size() > 0)
-            Glide.with(viewHolder.context).load(artistTabInfo.getImages().get(0)).into(viewHolder.image11);
+             Glide.with(viewHolder.context).load(artistTabInfo.getImages().get(0)). into(viewHolder.image11);
+
         else
             viewHolder.image11.setVisibility(View.GONE);
         if (artistTabInfo.getImages().size() > 1)

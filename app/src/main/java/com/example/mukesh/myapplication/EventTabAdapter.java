@@ -43,9 +43,9 @@ public class EventTabAdapter extends RecyclerView.Adapter<EventTabAdapter.EventT
             if (val.contains("http")) {
                 viewHolder.value.setMovementMethod(LinkMovementMethod.getInstance());
                 String text = "";
-                if (val.contains("event")) {
+                if (!eventTabDataLists.get(pos).isSeatMapURL()) {
                     text = "<a href='" + val + "'> Ticketmaster </a>";
-                } else if (val.contains("venue/maps")) {
+                } else {
                     text = "<a href='" + val + "'> View Here </a>";
                 }
                 viewHolder.value.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));

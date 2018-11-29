@@ -4,10 +4,10 @@ public class VenueTabInfo {
     private String venueName;
     private String address;
     private String city;
-    private String phoneNumber;
-    private String openHours;
-    private String generalRule;
-    private String childRule;
+    private String phoneNumber = "";
+    private String openHours = "";
+    private String generalRule = "";
+    private String childRule = "";
     private String lat;
     private String lon;
 

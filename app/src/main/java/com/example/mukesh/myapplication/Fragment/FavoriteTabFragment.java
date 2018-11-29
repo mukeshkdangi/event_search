@@ -25,7 +25,7 @@ import java.util.Objects;
  */
 
 public class FavoriteTabFragment extends Fragment {
-    public View view;
+    public static  View view;
     public RecyclerView recyclerView;
     public RecyclerView.LayoutManager layoutManager;
     public FavEventDetailsAdaptor adaptor;
@@ -51,6 +51,13 @@ public class FavoriteTabFragment extends Fragment {
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+        if (Objects.nonNull(view) && (Objects.isNull(eventDetails) || eventDetails.size() == 0)) {
+            view.findViewById(R.id.no_fav).setVisibility(View.VISIBLE);
+        }
+    }
+
+    public static void showNoFavMessage() {
+        view.findViewById(R.id.no_fav).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -73,5 +80,6 @@ public class FavoriteTabFragment extends Fragment {
 
         return view;
     }
+
 
 }

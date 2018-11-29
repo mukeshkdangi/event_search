@@ -234,20 +234,21 @@ public class SearchTabFragment extends Fragment {
 
     public void clearAllFields(View view1) {
         ((TextView) view.findViewById(R.id.auto_complete_edit_text)).setText("");
-        ((TextView) view.findViewById(R.id.distance)).setHint("10");
+        ((TextView) view.findViewById(R.id.distance)).setText("");
         ((Spinner) view.findViewById(R.id.category_spinner)).setSelection(0);
         ((Spinner) view.findViewById(R.id.unit_spinner)).setSelection(0);
         ((TextView) view.findViewById(R.id.location_desc)).setText("");
         view.findViewById(R.id.location_desc).setEnabled(false);
         view.findViewById(R.id.location_error).setVisibility(View.GONE);
         view.findViewById(R.id.keyword_error).setVisibility(View.GONE);
+        ((RadioGroup) view.findViewById(R.id.radioLocation)).check(R.id.from_here);
     }
 
 
     public void searchEvents(View view1) {
         RadioGroup radioGroup;
 
-        Pattern p = Pattern.compile("[^a-zA-Z0-9 ]");
+        Pattern p = Pattern.compile("[^a-zA-Z0-9' ]");
         boolean isInValidInput = false;
         String keyword = ((EditText) view.findViewById(R.id.auto_complete_edit_text)).getText().toString();
         if (keyword == null || keyword.length() <= 0 || p.matcher(keyword).find()) {
@@ -275,7 +276,7 @@ public class SearchTabFragment extends Fragment {
         int distance = 10;
 
         Editable textView = ((EditText) view.findViewById(R.id.distance)).getText();
-        if (!textView.toString().equalsIgnoreCase("" )&& Objects.nonNull(textView)) {
+        if (!textView.toString().equalsIgnoreCase("") && Objects.nonNull(textView)) {
             distance = Integer.valueOf(((EditText) view.findViewById(R.id.distance)).getText().toString());
         }
 
@@ -310,6 +311,7 @@ public class SearchTabFragment extends Fragment {
 
 
         Intent newIntent = new Intent(this.context, EventDetailsPage.class);
+        EventDetailsPage.initList();
         newIntent.putExtra("searchForm", new Gson().toJson(searchform));
         // searchform = new Gson().fromJson(getIntent().getStringExtra("searchForm"), SearchForm.class);
         startActivity(newIntent);

@@ -29,16 +29,21 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 
 public class UpcomingEventsFragment extends Fragment {
 
     public View view;
+    final List<UpcomingEventInfo> upcomingEventInfos = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +57,42 @@ public class UpcomingEventsFragment extends Fragment {
     }
 
     public UpcomingEventsFragment() {
+    }
+
+    public static void sortByDate(List<UpcomingEventInfo> upcomingEventInfos) {
+
+        Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
+            @Override
+            public int compare(UpcomingEventInfo object1, UpcomingEventInfo object2) {
+                Date time1 = new Date();
+                Date time2 = new Date();
+                SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                try {
+                    time1 = ft.parse(object1.getDate());
+
+                } catch (ParseException e) {
+                    try {
+                        ft = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                        time1 = ft.parse(object1.getDate());
+                    } catch (Exception e2) {
+                    }
+                }
+                try {
+                    ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                    time2 = ft.parse(object2.getDate());
+
+                } catch (ParseException e) {
+                    try {
+                        ft = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                        time2 = ft.parse(object2.getDate());
+                    } catch (Exception e2) {
+                    }
+                }
+                return (time1.compareTo(time2));
+            }
+
+
+        });
     }
 
 
@@ -71,7 +112,7 @@ public class UpcomingEventsFragment extends Fragment {
 
         Log.i("upcomingEventInfosStr", upcomingEventInfosStr);
 
-        Spinner spinner = view.findViewById(R.id.order_spinner);
+        final Spinner spinner = view.findViewById(R.id.order_spinner);
 
 
         List<String> categories = new ArrayList<>();
@@ -108,11 +149,13 @@ public class UpcomingEventsFragment extends Fragment {
 
         spinnerOrderType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view2, int position, long id) {
-                Collections.reverse(upcomingEventInfos);
-                RecyclerView recyclerView = view.findViewById(R.id.upcomingEventItemList);
-                recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-                recyclerView.setAdapter(new UpComingEventTabAdapter(upcomingEventInfos));
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (spinner.getSelectedItemPosition() != 0) {
+                    Collections.reverse(upcomingEventInfos);
+                    RecyclerView recyclerView = view.findViewById(R.id.upcomingEventItemList);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+                    recyclerView.setAdapter(new UpComingEventTabAdapter(upcomingEventInfos));
+                }
             }
 
             @Override
@@ -120,6 +163,7 @@ public class UpcomingEventsFragment extends Fragment {
 
             }
         });
+
 
         spinnerOrderType.setEnabled(false);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -134,6 +178,14 @@ public class UpcomingEventsFragment extends Fragment {
                                 return o1.getEventName().compareTo(o2.getEventName());
                             }
                         });
+                        if (spinnerOrderType.getSelectedItemPosition() == 1) {
+                            Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
+
+                                public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
+                                    return o2.getEventName().compareTo(o1.getEventName());
+                                }
+                            });
+                        }
                         break;
                     case 2:
                         spinnerOrderType.setEnabled(true);
@@ -143,16 +195,48 @@ public class UpcomingEventsFragment extends Fragment {
                                 return o1.getDate().compareTo(o2.getDate());
                             }
                         });
+                        if (spinnerOrderType.getSelectedItemPosition() == 1) {
+                            Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
+
+                                public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
+                                    return o2.getEventName().compareTo(o1.getEventName());
+                                }
+                            });
+                        }
                         break;
 
                     case 0:
-                        spinnerOrderType.setEnabled(false);
                         Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
-
-                            public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
-                                return o2.getDate().compareTo(o1.getDate());
+                            @Override
+                            public int compare(UpcomingEventInfo object1, UpcomingEventInfo object2) {
+                                Date time1 = new Date();
+                                Date time2 = new Date();
+                                SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                                try {
+                                    time1 = ft.parse(object1.getDate());
+                                } catch (ParseException e) {
+                                    try {
+                                        ft = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                                        time1 = ft.parse(object1.getDate());
+                                    } catch (Exception e2) {
+                                    }
+                                }
+                                try {
+                                    ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                                    time2 = ft.parse(object2.getDate());
+                                } catch (ParseException e) {
+                                    try {
+                                        ft = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                                        time2 = ft.parse(object2.getDate());
+                                    } catch (Exception e2) {
+                                    }
+                                }
+                                return time1.compareTo(time2);
                             }
+
+
                         });
+                        spinnerOrderType.setEnabled(false);
                         break;
 
                     case 4:
@@ -163,6 +247,14 @@ public class UpcomingEventsFragment extends Fragment {
                                 return o1.getType().compareTo(o2.getType());
                             }
                         });
+                        if (spinnerOrderType.getSelectedItemPosition() == 1) {
+                            Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
+
+                                public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
+                                    return o2.getEventName().compareTo(o1.getEventName());
+                                }
+                            });
+                        }
                         break;
 
                     case 3:
@@ -173,6 +265,14 @@ public class UpcomingEventsFragment extends Fragment {
                                 return o1.getArtistName().compareTo(o2.getArtistName());
                             }
                         });
+                        if (spinnerOrderType.getSelectedItemPosition() == 1) {
+                            Collections.sort(upcomingEventInfos, new Comparator<UpcomingEventInfo>() {
+
+                                public int compare(UpcomingEventInfo o1, UpcomingEventInfo o2) {
+                                    return o2.getEventName().compareTo(o1.getEventName());
+                                }
+                            });
+                        }
                         break;
                 }
 

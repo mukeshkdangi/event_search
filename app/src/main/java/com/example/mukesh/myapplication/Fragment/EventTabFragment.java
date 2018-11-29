@@ -75,19 +75,19 @@ public class EventTabFragment extends Fragment {
         String eventTabInfoStr = getArguments().getString("eventTabInfo");
         Log.i("eventDetail", new Gson().toJson(eventTabInfoStr));
         view = inflater.inflate(R.layout.fragment_event_tab, container, false);
-        progressBarHolder =  view.findViewById(R.id.progressBarHolder);
+        progressBarHolder = view.findViewById(R.id.progressBarHolder);
         progressBarHolder.dispatchDisplayHint(View.VISIBLE);
 
         EventTabInfo eventTabInfo = new Gson().fromJson(eventTabInfoStr, EventTabInfo.class);
 
         if (Objects.isNull(eventTabInfo)) {
-           // progressDialog.show(getChildFragmentManager(), "In Progress.....");
+            // progressDialog.show(getChildFragmentManager(), "In Progress.....");
             progressBarHolder.setAnimation(inAnimation);
             progressBarHolder.setVisibility(View.VISIBLE);
             return view;
 
         }
-       // progressDialog.cancel();
+        // progressDialog.cancel();
         progressBarHolder.setAnimation(outAnimation);
         progressBarHolder.setVisibility(View.GONE);
 
@@ -108,14 +108,22 @@ public class EventTabFragment extends Fragment {
 
         eventTabDataList = new EventTabDataList();
         eventTabDataList.setKey("Time");
-        SimpleDateFormat ft = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss", Locale.US);
-        if (!eventTabInfo.getTime().equalsIgnoreCase("null")) {
+
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+        try {
+            Date time = ft.parse(eventTabInfo.getTime());
+            ft.applyPattern("MMM dd, yyyy hh:mm:ss");
+            eventTabDataList.setValue(ft.format(time));
+        } catch (ParseException e) {
             try {
+
+                ft = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                 Date time = ft.parse(eventTabInfo.getTime());
-                ft.applyPattern("MMM dd, yyyy hh:mm:ss");
+                ft.applyPattern("MMM dd, yyyy");
                 eventTabDataList.setValue(ft.format(time));
-            } catch (ParseException e) {
-                e.printStackTrace();
+            } catch (Exception e2) {
+                eventTabDataList.setValue("-");
             }
         }
 
@@ -147,7 +155,9 @@ public class EventTabFragment extends Fragment {
         eventTabDataList = new EventTabDataList();
         eventTabDataList.setKey("Seat Map");
         eventTabDataList.setValue(eventTabInfo.getSeatMapUrl());
+        eventTabDataList.setSeatMapURL(true);
         eventTabDataListList.add(eventTabDataList);
+
 
         recyclerView.setAdapter(new EventTabAdapter(eventTabDataListList));
 
