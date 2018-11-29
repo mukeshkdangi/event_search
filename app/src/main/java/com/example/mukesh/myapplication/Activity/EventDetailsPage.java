@@ -96,6 +96,8 @@ public class EventDetailsPage extends AppCompatActivity {
         applicationCtx = getApplicationContext();
 
         if (Objects.isNull(searchform)) {
+            EventDetailsPage.progressBarHolder.setAnimation(EventDetailsPage.outAnimation);
+            EventDetailsPage.progressBarHolder.setVisibility(View.GONE);
             return;
         }
 
@@ -178,7 +180,6 @@ class GetEventResults extends AsyncTask<String, Integer, String> {
 
         EventDetailsPage.adaptor = new EventDetailsAdaptor(eventDetails, EventDetailsPage.applicationCtx);
         EventDetailsPage.recyclerView.setAdapter(EventDetailsPage.adaptor);
-        //EventDetailsPage.progressDialog.cancel();
         EventDetailsPage.progressBarHolder.setAnimation(EventDetailsPage.outAnimation);
         EventDetailsPage.progressBarHolder.setVisibility(View.GONE);
 

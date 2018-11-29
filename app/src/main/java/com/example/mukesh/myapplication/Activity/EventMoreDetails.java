@@ -67,7 +67,7 @@ public class EventMoreDetails extends AppCompatActivity {
         toolbar.setTitle(eventDetails.getEventName());
 
         final ImageView favIcon = findViewById(R.id.favicon2);
-        favIcon.setImageResource(eventDetails.isFav() ? R.drawable.heart_fill_red : R.drawable.heart_outline_white);
+        favIcon.setImageResource(eventDetails.isFav() ? R.drawable.heart_fill_red : R.drawable.heart_fill_white);
         ImageView twitter = findViewById(R.id.twitter);
         twitter.setImageResource(R.drawable.twitter_ic);
 
@@ -125,7 +125,7 @@ public class EventMoreDetails extends AppCompatActivity {
 
             if (eventDetails.isFav()) {
                 eventDetails.setFav(false);
-                img.setImageResource(R.drawable.heart_outline_white);
+                img.setImageResource(R.drawable.heart_fill_white);
                 sharedPreferenceConfig.removeFromSharedPref(new Gson().toJson(eventDetails));
                 Toast toast = Toast.makeText(this, eventDetails.getEventName() + "was removed to favorites",
                         Toast.LENGTH_LONG);

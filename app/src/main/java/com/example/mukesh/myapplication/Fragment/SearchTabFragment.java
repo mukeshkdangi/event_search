@@ -42,6 +42,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 
@@ -271,8 +272,13 @@ public class SearchTabFragment extends Fragment {
 
         Spinner spinner = view.findViewById(R.id.category_spinner);
         String category = spinner.getSelectedItem().toString();
+        int distance = 10;
 
-        int distance = Integer.valueOf(((EditText) view.findViewById(R.id.distance)).getText().toString());
+        Editable textView = ((EditText) view.findViewById(R.id.distance)).getText();
+        if (!textView.toString().equalsIgnoreCase("" )&& Objects.nonNull(textView)) {
+            distance = Integer.valueOf(((EditText) view.findViewById(R.id.distance)).getText().toString());
+        }
+
         spinner = view.findViewById(R.id.unit_spinner);
         String unit = spinner.getSelectedItem().toString();
 
@@ -283,7 +289,9 @@ public class SearchTabFragment extends Fragment {
         searchform.setDistanceUnit(unit);
 
         radioGroup = view.findViewById(R.id.radioLocation);
+
         int selectedId = radioGroup.getCheckedRadioButtonId();
+
         if (((RadioButton) view.findViewById(selectedId)).getText().toString().contains("Other")) {
             searchform.setOtherLocation(true);
         } else {

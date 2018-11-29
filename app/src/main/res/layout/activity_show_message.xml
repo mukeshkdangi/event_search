@@ -16,6 +16,7 @@
             android:id="@+id/progressBarHolder2"
             android:animateLayoutChanges="true"
             android:alpha="0.3"
+            android:visibility="gone"
             android:background="@color/grey"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -36,8 +37,8 @@
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:textSize="15dp"
-                android:textColor="@color/orange"
-                android:text="Loading..." />
+                android:textColor="@color/colorAccent"
+                android:text="Searching Events...." />
 
         </FrameLayout>
     </RelativeLayout>

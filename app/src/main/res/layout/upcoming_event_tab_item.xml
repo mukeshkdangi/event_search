@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingLeft="20dp"
+            android:textColor="@color/orange"
             android:paddingTop="10dp"
             android:text="textview2"
             android:textSize="14sp" />
@@ -40,7 +41,6 @@
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:text="textview2"
-            android:textColor="@color/orange"
             android:textSize="14sp" />
 
         <TextView
