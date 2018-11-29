@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,9 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
-import com.example.mukesh.myapplication.DelayedProgressDialog;
 import com.example.mukesh.myapplication.EventTabAdapter;
 import com.example.mukesh.myapplication.POJO.EventDetails;
 import com.example.mukesh.myapplication.POJO.EventTabDataList;
@@ -49,7 +46,6 @@ import java.util.Objects;
  */
 public class EventTabFragment extends Fragment {
 
-    public static DelayedProgressDialog progressDialog = new DelayedProgressDialog();
     public View view;
     public Context appContext;
     public FragmentManager fragmentTransaction;

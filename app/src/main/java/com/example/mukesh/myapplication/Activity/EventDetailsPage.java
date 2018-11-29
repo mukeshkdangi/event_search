@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 
-import com.example.mukesh.myapplication.DelayedProgressDialog;
 import com.example.mukesh.myapplication.EventDetailsAdaptor;
 import com.example.mukesh.myapplication.POJO.EventDetails;
 import com.example.mukesh.myapplication.POJO.SearchForm;
@@ -96,8 +94,6 @@ public class EventDetailsPage extends AppCompatActivity {
         applicationCtx = getApplicationContext();
 
         if (Objects.isNull(searchform)) {
-            EventDetailsPage.progressBarHolder.setAnimation(EventDetailsPage.outAnimation);
-            EventDetailsPage.progressBarHolder.setVisibility(View.GONE);
             return;
         }
 
