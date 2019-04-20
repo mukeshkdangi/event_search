@@ -9,7 +9,7 @@
     - Venue details
     - Similar artists
   
-- [x] Technologies and Frameworks: AWS, NodeJS, Bootstrap, Angular 7 and MVC architecture. 
+- [x] Technologies and Frameworks: AWS, NodeJS, Bootstrap, Angular 7 and MVC architecture. Libs : Glide, Picasso, Volley
 - [x] API Integration: Song kick, Spotify, Ticketmaster, Google customizes search, Google Map and twitter.
 
 > References :
